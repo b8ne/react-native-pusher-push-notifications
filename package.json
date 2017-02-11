@@ -4,7 +4,7 @@
   "description": "Manage pusher channel subscriptions from within React Native JS",
   "main": "index.js",
   "scripts": {
-    "test": "test.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,9 @@
   ],
   "author": "b8ne",
   "license": "MIT",
+  "peerDependencies": {
+    "react-native": "^0.29.0",
+  },
   "bugs": {
     "url": "https://github.com/b8ne/react-native-pusher-push-notifications/issues"
   },
