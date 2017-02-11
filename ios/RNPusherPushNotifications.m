@@ -1,8 +1,8 @@
 
-#import "RNReactNativePusherPushNotifications.h"
+#import "RNPusherPushNotifications.h"
 #import "RCTLog.h"
 
-@implementation RNReactNativePusherPushNotifications
+@implementation RNPusherPushNotifications
 
 - (dispatch_queue_t)methodQueue
 {

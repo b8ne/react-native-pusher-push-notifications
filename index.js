@@ -1,6 +1,6 @@
 
 import { NativeModules } from 'react-native';
 
-const { RNReactNativePusherPushNotifications } = NativeModules;
+const { RNPusherPushNotifications } = NativeModules;
 
-export default RNReactNativePusherPushNotifications;
+export default RNPusherPushNotifications;

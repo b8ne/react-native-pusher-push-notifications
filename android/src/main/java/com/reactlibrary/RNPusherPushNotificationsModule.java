@@ -8,12 +8,12 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.Callback;
 
-public class RNReactNativePusherPushNotificationsModule extends ReactContextBaseJavaModule {
+public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule {
 
   private final ReactApplicationContext reactContext;
   private PusherWrapper pusher;
 
-  public RNReactNativePusherPushNotificationsModule(ReactApplicationContext reactContext) {
+  public RNPusherPushNotificationsModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
     this.pusher = new PusherWrapper();
@@ -21,7 +21,7 @@ public class RNReactNativePusherPushNotificationsModule extends ReactContextBase
 
   @Override
   public String getName() {
-    return "RNReactNativePusherPushNotifications";
+    return "RNPusherPushNotifications";
   }
 
   	@ReactMethod
