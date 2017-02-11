@@ -1,5 +1,5 @@
 
-package com.reactlibrary;
+package com.b8ne.RNPusherPushNotifications;
 
 import android.app.Activity;
 import android.os.AsyncTask;

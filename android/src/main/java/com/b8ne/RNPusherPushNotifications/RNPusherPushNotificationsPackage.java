@@ -1,5 +1,5 @@
 
-package com.reactlibrary;
+package com.b8ne.RNPusherPushNotifications;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
 
-public class RNPushNotificationsPackage implements ReactPackage {
+public class RNPusherPushNotificationsPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
       return Arrays.<NativeModule>asList(new RNPusherPushNotificationsModule(reactContext));
