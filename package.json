@@ -19,7 +19,7 @@
   "author": "b8ne",
   "license": "MIT",
   "peerDependencies": {
-    "react-native": "^0.29.0",
+    "react-native": "^0.29.0"
   },
   "bugs": {
     "url": "https://github.com/b8ne/react-native-pusher-push-notifications/issues"
