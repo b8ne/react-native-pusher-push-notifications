@@ -1,6 +1,8 @@
 # react-native-pusher-push-notifications
 Manage pusher channel subscriptions from within React Native JS
 
+[![npm version](https://badge.fury.io/js/react-native-pusher-push-notifications.svg)](https://badge.fury.io/js/react-native-pusher-push-notifications)
+
 ## Getting started
 
 `$ npm install react-native-pusher-push-notifications --save`
