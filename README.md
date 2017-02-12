@@ -43,12 +43,18 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 
 1. After package installation open `AppDelegate.m` and add:
 ```aidl
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    ...
     self.pusher = [PTPusher pusherWithKey:@"<YOUR PUSHER APP KEY>" delegate:self encrypted:YES cluster:@"<YOUR PUSHER REGION>"];
     [[RNPusherPushNotifications init] pusher]; // <---- ADD THIS LINE BELOW DEFAULT PUSHER INIT
+    ...
+}
 ```
 
 ## Usage
 ```javascript
+// Import module
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
 
@@ -59,10 +65,10 @@ const channel = "donuts";
 // Subscribe to push notifications
 if (Platform.OS === 'ios') {
     // iOS callbacks are beta, so dont use them
-    NotificationManager.subscribe(channel);
+    RNPusherPushNotifications.subscribe(channel);
 } else {
     // Android is better, so handle faults
-    NotificationManager.subscribe(
+    RNPusherPushNotifications.subscribe(
         channel,
         (error) => {
             console.error(error);
@@ -77,10 +83,10 @@ if (Platform.OS === 'ios') {
 // Unsubscribe from push notifications
 if (Platform.OS === 'ios') {
     // iOS callbacks are beta, so dont use them
-    NotificationManager.unsubscribe(channel);
+    RNPusherPushNotifications.unsubscribe(channel);
 } else {
     // Android is better, so handle faults
-    NotificationManager.unsubscribe(
+    RNPusherPushNotifications.unsubscribe(
         channel,
         (error) => {
             console.error(error);
