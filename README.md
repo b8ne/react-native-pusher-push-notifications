@@ -13,7 +13,6 @@ Manage pusher channel subscriptions from within React Native JS
 
 ### Manual installation
 
-
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
@@ -36,11 +35,58 @@ Manage pusher channel subscriptions from within React Native JS
       compile project(':react-native-pusher-push-notifications')
   	```
 
+### All installations
+
+#### iOS
+
+1. After package installation open `AppDelegate.m` and add:
+```aidl
+    self.pusher = [PTPusher pusherWithKey:@"<YOUR PUSHER APP KEY>" delegate:self encrypted:YES cluster:@"<YOUR PUSHER REGION>"];
+    [[RNPusherPushNotifications init] pusher]; // <---- ADD THIS LINE BELOW DEFAULT PUSHER INIT
+```
+
 ## Usage
 ```javascript
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
-// TODO: What do with the module?
-RNPusherPushNotifications;
+
+// Get your channel
+const channel = "donuts";
+
+
+// Subscribe to push notifications
+if (Platform.OS === 'ios') {
+    // iOS callbacks are beta, so dont use them
+    NotificationManager.subscribe(channel);
+} else {
+    // Android is better, so handle faults
+    NotificationManager.subscribe(
+        channel,
+        (error) => {
+            console.error(error);
+        },
+        (success) => {
+            console.log(success);
+        }
+    );
+}
+
+
+// Unsubscribe from push notifications
+if (Platform.OS === 'ios') {
+    // iOS callbacks are beta, so dont use them
+    NotificationManager.unsubscribe(channel);
+} else {
+    // Android is better, so handle faults
+    NotificationManager.unsubscribe(
+        channel,
+        (error) => {
+            console.error(error);
+        },
+        (success) => {
+            console.log(success);
+        }
+    );
+}
 ```
   
