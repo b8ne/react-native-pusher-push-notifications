@@ -1,6 +1,8 @@
 # react-native-pusher-push-notifications
 Manage pusher channel subscriptions from within React Native JS
 
+IMPORTANT!!! This module is intended to complement the default [Pusher setup](https://pusher.com/docs/push_notifications).  This module simply allows that implementation to be accessed directly from React Native JS.
+
 [![npm version](https://badge.fury.io/js/react-native-pusher-push-notifications.svg)](https://badge.fury.io/js/react-native-pusher-push-notifications)
 
 ## Getting started
