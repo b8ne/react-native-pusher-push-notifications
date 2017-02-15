@@ -41,18 +41,19 @@ Manage pusher channel subscriptions from within React Native JS
 
 1. After package installation open `AppDelegate.m` and add:
 ```aidl
-    self.pusher = [PTPusher pusherWithKey:@"<YOUR PUSHER APP KEY>" delegate:self encrypted:YES cluster:@"<YOUR PUSHER REGION>"];
-    [[RNPusherPushNotifications init] pusher]; // <---- ADD THIS LINE BELOW DEFAULT PUSHER INIT
+    - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+      [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+      [[[self pusher] nativePusher] registerWithDeviceToken:deviceToken];
+      [RNPusherPushNotifications setPusher:_pusher]; // <---- ADD THIS LINE BELOW DEFAULT PUSHER INIT
+    }
 ```
 
 ## Usage
 ```javascript
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
-
 // Get your channel
 const channel = "donuts";
-
 
 // Subscribe to push notifications
 if (Platform.OS === 'ios') {
@@ -70,7 +71,6 @@ if (Platform.OS === 'ios') {
         }
     );
 }
-
 
 // Unsubscribe from push notifications
 if (Platform.OS === 'ios') {

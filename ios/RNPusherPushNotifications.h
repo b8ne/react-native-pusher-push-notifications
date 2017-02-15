@@ -4,10 +4,10 @@
 @interface RNPusherPushNotifications : NSObject <RCTBridgeModule>
 
 @property (nonatomic, strong) PTPusher *pusher;
-@property (nonatomic, strong) NSString *pusherKey;
 
--(void)init:(PTPusher *)pusher;
++(void)setPusher:(PTPusher *)pusher;
 
 @end
+
 
   
