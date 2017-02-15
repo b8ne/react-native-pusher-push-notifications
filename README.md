@@ -1,6 +1,8 @@
 # react-native-pusher-push-notifications
 Manage pusher channel subscriptions from within React Native JS
 
+IMPORTANT!!! This module is intended to complement the default [Pusher setup](https://pusher.com/docs/push_notifications).  This module simply allows that implementation to be accessed directly from React Native JS.
+
 [![npm version](https://badge.fury.io/js/react-native-pusher-push-notifications.svg)](https://badge.fury.io/js/react-native-pusher-push-notifications)
 
 ## Getting started
@@ -50,6 +52,7 @@ Manage pusher channel subscriptions from within React Native JS
 
 ## Usage
 ```javascript
+// Import module
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
 // Get your channel
@@ -58,10 +61,10 @@ const channel = "donuts";
 // Subscribe to push notifications
 if (Platform.OS === 'ios') {
     // iOS callbacks are beta, so dont use them
-    NotificationManager.subscribe(channel);
+    RNPusherPushNotifications.subscribe(channel);
 } else {
     // Android is better, so handle faults
-    NotificationManager.subscribe(
+    RNPusherPushNotifications.subscribe(
         channel,
         (error) => {
             console.error(error);
@@ -75,10 +78,10 @@ if (Platform.OS === 'ios') {
 // Unsubscribe from push notifications
 if (Platform.OS === 'ios') {
     // iOS callbacks are beta, so dont use them
-    NotificationManager.unsubscribe(channel);
+    RNPusherPushNotifications.unsubscribe(channel);
 } else {
     // Android is better, so handle faults
-    NotificationManager.unsubscribe(
+    RNPusherPushNotifications.unsubscribe(
         channel,
         (error) => {
             console.error(error);
