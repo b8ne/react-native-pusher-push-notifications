@@ -1,6 +1,5 @@
+'use strict';
 
 import { NativeModules } from 'react-native';
 
-const { RNPusherPushNotifications } = NativeModules;
-
-export default RNPusherPushNotifications;
+module.exports = NativeModules.RNPusherPushNotifications;

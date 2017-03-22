@@ -55,6 +55,9 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 // Import module
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
+// Set your app key
+RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY)
+
 // Get your channel
 const channel = "donuts";
 
@@ -92,4 +95,3 @@ if (Platform.OS === 'ios') {
     );
 }
 ```
-  
