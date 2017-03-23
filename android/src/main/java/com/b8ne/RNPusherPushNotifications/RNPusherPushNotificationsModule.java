@@ -25,7 +25,7 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
 
   @ReactMethod
   public void setAppKey(String appKey) {
-    this.pusher = new PusherWrapper(appKey);
+    this.pusher = new PusherWrapper(appKey, this.reactContext);
   }
 
   	@ReactMethod
