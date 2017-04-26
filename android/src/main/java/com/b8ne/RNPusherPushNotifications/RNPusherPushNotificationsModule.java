@@ -16,12 +16,16 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
   public RNPusherPushNotificationsModule(ReactApplicationContext reactContext) {
     super(reactContext);
     this.reactContext = reactContext;
-    this.pusher = new PusherWrapper();
   }
 
   @Override
   public String getName() {
     return "RNPusherPushNotifications";
+  }
+
+  @ReactMethod
+  public void setAppKey(String appKey) {
+    this.pusher = new PusherWrapper(appKey, this.reactContext);
   }
 
   	@ReactMethod
