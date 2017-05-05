@@ -49,6 +49,7 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
       [RNPusherPushNotifications setPusher:_pusher]; // <---- ADD THIS LINE BELOW DEFAULT PUSHER INIT
     }
 ```
+2. Go to `RNPusherPushNotification` in your xcode workspace.  Add `$(SRCROOT)/../../../ios/Pods/Headers/Public/libPusher` to header search paths.
 
 ## Usage
 ```javascript
