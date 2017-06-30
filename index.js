@@ -8,11 +8,11 @@ export default {
   setAppKey: (appKey) => {
     RNPusherPushNotifications.setAppKey(appKey)
   },
-  subscribe: (channel) => {
-    RNPusherPushNotifications.subscribe(channel)
+  subscribe: (channel, onError, onSuccess) => {
+    RNPusherPushNotifications.subscribe(channel, onError, onSuccess)
   },
-  unsubscribe: (channel) => {
-    RNPusherPushNotifications.unsubscribe(channel)
+  unsubscribe: (channel, onError, onSuccess) => {
+    RNPusherPushNotifications.unsubscribe(channel, onError, onSuccess)
   },
   on: (eventName, callback) => {
     rnPusherPushNotificationsEmitter.addListener(

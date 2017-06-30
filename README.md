@@ -69,8 +69,18 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 // Get your channel
 const channel = "donuts";
 
-// Listen for successful registration, you can't subscribe until this has completed on the native side
-PSNotifications.on('registered', () => {
+// Set your app key and register for push
+PSNotifications.setAppKey(ENV.PUSHER_APP_KEY);
+
+if (Platform.OS === 'ios') {
+  // iOS must wait for rego
+  PSNotifications.on('registered', this.initChannels)
+} else {
+  // Android is immediate
+  this.initChannels()
+}
+
+function initChannels() {
     // Subscribe to push notifications
     if (Platform.OS === 'ios') {
         // iOS callbacks are beta, so dont use them
@@ -87,10 +97,7 @@ PSNotifications.on('registered', () => {
             }
         );
     }
-});
-
-// Set your app key and register for push
-RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY)
+}
 
 // Unsubscribe from push notifications
 if (Platform.OS === 'ios') {
