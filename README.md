@@ -41,43 +41,56 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 
 #### iOS
 
-1. After package installation open `AppDelegate.m` and add:
+** DO NOT follow the pusher.com push notification docs that detail modifying the AppDelegate.h/m files! - this package takes care of most of the steps for you**
+
+1. After package installation open `AppDelegate.h` and add:
 ```aidl
+    #import "RNPusherPushNotifications.h"
+    // ..after @implements and before @end
+    @property (nonatomic, strong) RNPusherPushNotifications *RNPusher;
+```
+2. Open `AppDelegate.m` and add:
+```aidl
+    // Inside didFinishLaunchingWithOptions, near the bottom (after rootView has been initialised)
+    self.RNPusher = [rootView.bridge moduleForName:@"RNPusherPushNotifications"];
+
+    // Add the following as a new method to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-      [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-      [[[self pusher] nativePusher] registerWithDeviceToken:deviceToken];
-      [RNPusherPushNotifications setPusher:_pusher]; // <---- ADD THIS LINE BELOW DEFAULT PUSHER INIT
+      [[self RNPusher] setDeviceToken:deviceToken];
     }
 ```
-2. Go to `RNPusherPushNotification` in your xcode workspace.  Add `$(SRCROOT)/../../../ios/Pods/Headers/Public/libPusher` to header search paths.
+3. Go to `RNPusherPushNotification` in your xcode workspace.  Add `$(SRCROOT)/../../../ios/Pods/Headers/Public/libPusher` to header search paths.
 
 ## Usage
 ```javascript
 // Import module
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
-// Set your app key
-RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY)
-
 // Get your channel
 const channel = "donuts";
 
-// Subscribe to push notifications
-if (Platform.OS === 'ios') {
-    // iOS callbacks are beta, so dont use them
-    RNPusherPushNotifications.subscribe(channel);
-} else {
-    // Android is better, so handle faults
-    RNPusherPushNotifications.subscribe(
-        channel,
-        (error) => {
-            console.error(error);
-        },
-        (success) => {
-            console.log(success);
-        }
-    );
-}
+// Listen for successful registration, you can't subscribe until this has completed on the native side
+PSNotifications.on('registered', () => {
+    // Subscribe to push notifications
+    if (Platform.OS === 'ios') {
+        // iOS callbacks are beta, so dont use them
+        RNPusherPushNotifications.subscribe(channel);
+    } else {
+        // Android is better, so handle faults
+        RNPusherPushNotifications.subscribe(
+            channel,
+            (error) => {
+                console.error(error);
+            },
+            (success) => {
+                console.log(success);
+            }
+        );
+    }
+});
+
+// Set your app key and register for push
+RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY)
 
 // Unsubscribe from push notifications
 if (Platform.OS === 'ios') {
