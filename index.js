@@ -9,14 +9,14 @@ export default {
     RNPusherPushNotifications.setAppKey(appKey)
   },
   subscribe: (channel, onError, onSuccess) => {
-    if (Platform.os === 'ios') {
+    if (Platform.OS === 'ios') {
       RNPusherPushNotifications.subscribe(channel)
     } else {
       RNPusherPushNotifications.subscribe(channel, onError, onSuccess)
     }
   },
   unsubscribe: (channel, onError, onSuccess) => {
-    if (Platform.os === 'ios') {
+    if (Platform.OS === 'ios') {
       RNPusherPushNotifications.unsubscribe(channel)
     } else {
       RNPusherPushNotifications.unsubscribe(channel, onError, onSuccess)
