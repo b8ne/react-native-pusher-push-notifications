@@ -1,11 +1,12 @@
 #import "RCTBridgeModule.h"
+#import <React/RCTEventEmitter.h>
 #import <Pusher/Pusher.h>
 
-@interface RNPusherPushNotifications : NSObject <RCTBridgeModule>
+@interface RNPusherPushNotifications : RCTEventEmitter <RCTBridgeModule, PTPusherDelegate>
 
-@property (nonatomic, strong) PTPusher *pusher;
+@property (nonatomic) PTPusher *pusher;
 
-+(void)setPusher:(PTPusher *)pusher;
+-(void)setDeviceToken:(NSData *)deviceToken;
 
 @end
 
