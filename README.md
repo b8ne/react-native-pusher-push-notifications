@@ -59,7 +59,6 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
       [[self RNPusher] setDeviceToken:deviceToken];
     }
 ```
-3. Go to `RNPusherPushNotification` in your xcode workspace.  Add `$(SRCROOT)/../../../ios/Pods/Headers/Public/libPusher` to header search paths.
 
 ## Usage
 ```javascript
