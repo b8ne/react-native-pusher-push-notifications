@@ -74,10 +74,10 @@ PSNotifications.setAppKey(ENV.PUSHER_APP_KEY);
 
 if (Platform.OS === 'ios') {
   // iOS must wait for rego
-  PSNotifications.on('registered', this.initChannels)
+  PSNotifications.on('registered', initChannels)
 } else {
   // Android is immediate
-  this.initChannels()
+  initChannels()
 }
 
 function initChannels() {
