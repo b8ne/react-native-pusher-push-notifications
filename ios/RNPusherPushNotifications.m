@@ -31,20 +31,20 @@ RCT_EXPORT_METHOD(setAppKey:(NSString *)appKey)
     });
 }
 
-RCT_EXPORT_METHOD(subscribe:(NSString *)channel)
+RCT_EXPORT_METHOD(subscribe:(NSString *)interest)
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        RCTLogInfo(@"Subscribing to: %@", channel);
-        [[[self pusher] nativePusher] subscribe:(NSString *)channel];
+        RCTLogInfo(@"Subscribing to: %@", interest);
+        [[[self pusher] nativePusher] subscribe:(NSString *)interest];
     });
 }
 
-RCT_EXPORT_METHOD(unsubscribe:(NSString *)channel)
+RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest)
 {
 
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      RCTLogInfo(@"Unsubscribing from: %@", channel);
-      [[[self pusher] nativePusher] unsubscribe:(NSString *)channel];
+      RCTLogInfo(@"Unsubscribing from: %@", interest);
+      [[[self pusher] nativePusher] unsubscribe:(NSString *)interest];
   });
 }
 

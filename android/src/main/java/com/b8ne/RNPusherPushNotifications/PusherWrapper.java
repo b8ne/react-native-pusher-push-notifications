@@ -67,14 +67,14 @@ public class PusherWrapper {
         return this.nativePusher;
     }
 
-    public void subscribe(final String channel) {
-        Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  channel);
-        System.out.print("Attempting to subscribe to " +  channel);
-        nativePusher.subscribe(channel, new InterestSubscriptionChangeListener() {
+    public void subscribe(final String interest) {
+        Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  interest);
+        System.out.print("Attempting to subscribe to " +  interest);
+        nativePusher.subscribe(interest, new InterestSubscriptionChangeListener() {
             @Override
             public void onSubscriptionChangeSucceeded() {
-                Log.d("PUSHER_WRAPPER", "Success! " + channel);
-                System.out.print("Success! " + channel);
+                Log.d("PUSHER_WRAPPER", "Success! " + interest);
+                System.out.print("Success! " + interest);
             }
 
             @Override
@@ -85,12 +85,12 @@ public class PusherWrapper {
         });
     }
 
-    public void unsubscribe(final String channel) {
-        nativePusher.unsubscribe(channel, new InterestSubscriptionChangeListener() {
+    public void unsubscribe(final String interest) {
+        nativePusher.unsubscribe(interest, new InterestSubscriptionChangeListener() {
             @Override
             public void onSubscriptionChangeSucceeded() {
-              Log.d("PUSHER_WRAPPER", "Success! " + channel);
-              System.out.print("Success! " + channel);
+              Log.d("PUSHER_WRAPPER", "Success! " + interest);
+              System.out.print("Success! " + interest);
             }
 
             @Override
