@@ -69,11 +69,11 @@ import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 const channel = "donuts";
 
 // Set your app key and register for push
-PSNotifications.setAppKey(ENV.PUSHER_APP_KEY);
+RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY);
 
 if (Platform.OS === 'ios') {
   // iOS must wait for rego
-  PSNotifications.on('registered', initChannels)
+  RNPusherPushNotifications.on('registered', initChannels)
 } else {
   // Android is immediate
   initChannels()
