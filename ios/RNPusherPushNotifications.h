@@ -1,4 +1,4 @@
-#import "RCTBridgeModule.h"
+#import <RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 #import <Pusher/Pusher.h>
 
