@@ -88,8 +88,8 @@ function initInterests() {
         // Android is better, so handle faults
         RNPusherPushNotifications.subscribe(
             interest,
-            (error) => {
-                console.error(error);
+            (statusCode, response) => {
+                console.error(statusCode, response);
             },
             (success) => {
                 console.log(success);
@@ -106,8 +106,8 @@ if (Platform.OS === 'ios') {
     // Android is better, so handle faults
     RNPusherPushNotifications.unsubscribe(
         interest,
-        (error) => {
-            console.error(error);
+        (statusCode, response) => {
+            console.error(statusCode, response);
         },
         (success) => {
             console.log(success);

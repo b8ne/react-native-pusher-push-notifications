@@ -2,6 +2,7 @@ package com.b8ne.RNPusherPushNotifications;
 
 import android.util.Log;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactContext;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.android.PusherAndroid;
@@ -67,36 +68,40 @@ public class PusherWrapper {
         return this.nativePusher;
     }
 
-    public void subscribe(final String interest) {
-        Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  interest);
-        System.out.print("Attempting to subscribe to " +  interest);
-        nativePusher.subscribe(interest, new InterestSubscriptionChangeListener() {
+    public void subscribe(final String channel, final Callback errorCallback, final Callback successCallback) {
+        Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  channel);
+        System.out.print("Attempting to subscribe to " +  channel);
+        nativePusher.subscribe(channel, new InterestSubscriptionChangeListener() {
             @Override
             public void onSubscriptionChangeSucceeded() {
-                Log.d("PUSHER_WRAPPER", "Success! " + interest);
-                System.out.print("Success! " + interest);
+                Log.d("PUSHER_WRAPPER", "Success! " + channel);
+                System.out.print("Success! " + channel);
+                successCallback.invoke();
             }
 
             @Override
             public void onSubscriptionChangeFailed(int statusCode, String response) {
                 Log.d("PUSHER_WRAPPER", ":(: received " + statusCode + " with" + response);
                 System.out.print(":(: received " + statusCode + " with" + response);
+                errorCallback.invoke(statusCode, response);
             }
         });
     }
 
-    public void unsubscribe(final String interest) {
-        nativePusher.unsubscribe(interest, new InterestSubscriptionChangeListener() {
+    public void unsubscribe(final String channel, final Callback errorCallback, final Callback successCallback) {
+        nativePusher.unsubscribe(channel, new InterestSubscriptionChangeListener() {
             @Override
             public void onSubscriptionChangeSucceeded() {
-              Log.d("PUSHER_WRAPPER", "Success! " + interest);
-              System.out.print("Success! " + interest);
+              Log.d("PUSHER_WRAPPER", "Success! " + channel);
+              System.out.print("Success! " + channel);
+              successCallback.invoke();
             }
 
             @Override
             public void onSubscriptionChangeFailed(int statusCode, String response) {
                 Log.d("PUSHER_WRAPPER", ":(: received " + statusCode + " with" + response);
                 System.out.print(":(: received " + statusCode + " with" + response);
+                errorCallback.invoke(statusCode, response);
             }
         });
     }

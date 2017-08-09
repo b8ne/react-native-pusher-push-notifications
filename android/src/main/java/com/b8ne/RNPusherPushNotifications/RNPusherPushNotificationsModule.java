@@ -28,22 +28,22 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
     this.pusher = new PusherWrapper(appKey, this.reactContext);
   }
 
-  	@ReactMethod
-   	public void subscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
+    @ReactMethod
+    public void subscribe(final String channel, final Callback errorCallback, final Callback successCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.subscribe(interest);
+                pusher.subscribe(channel, errorCallback, successCallback);
             }
         });
     }
 
     @ReactMethod
-    public void unsubscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
+    public void unsubscribe(final String channel, final Callback errorCallback, final Callback successCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.unsubscribe(interest);
+                pusher.unsubscribe(channel, errorCallback, successCallback);
             }
         });
     }
