@@ -1,4 +1,4 @@
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 #import <Pusher/Pusher.h>
 
@@ -7,8 +7,7 @@
 @property (nonatomic) PTPusher *pusher;
 
 -(void)setDeviceToken:(NSData *)deviceToken;
+-(void)handleNotification:(NSDictionary *)notification;
 
 @end
-
-
   

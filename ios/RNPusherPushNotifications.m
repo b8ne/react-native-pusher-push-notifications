@@ -14,7 +14,7 @@ RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"registered"];
+    return @[@"registered", @"notification"];
 }
 
 RCT_EXPORT_METHOD(setAppKey:(NSString *)appKey)
@@ -48,10 +48,17 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest)
   });
 }
 
+- (void)handleNotification:(NSDictionary *)notification
+{
+    [self sendEventWithName:@"notification" body:notification];
+}
+
 - (void)setDeviceToken:(NSData *)deviceToken
 {
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
     [[[self pusher] nativePusher] registerWithDeviceToken:deviceToken];
+    
+    RCTLogInfo(@"SEND REGISTERED");
 
     [self sendEventWithName:@"registered" body:@{}];
 }
