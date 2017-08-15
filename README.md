@@ -54,9 +54,13 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
     // Inside didFinishLaunchingWithOptions, near the bottom (after rootView has been initialised)
     self.RNPusher = [rootView.bridge moduleForName:@"RNPusherPushNotifications"];
 
-    // Add the following as a new method to AppDelegate.m
+    // Add the following as a new methods to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-      [[self RNPusher] setDeviceToken:deviceToken];
+      [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] setDeviceToken:deviceToken];
+    }
+
+    - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification {
+      [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] handleNotification:notification];
     }
 ```
 
@@ -74,9 +78,14 @@ RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY);
 if (Platform.OS === 'ios') {
   // iOS must wait for rego
   RNPusherPushNotifications.on('registered', initInterests)
+  RNPusherPushNotifications.on('notification', handleNotification)
 } else {
   // Android is immediate
   initInterests()
+}
+
+function handleNotification(notification) {
+  console.log('# ', notification)
 }
 
 function initInterests() {
