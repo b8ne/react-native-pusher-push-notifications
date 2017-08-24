@@ -45,18 +45,15 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 
 1. After package installation open `AppDelegate.h` and add:
 ```aidl
-    #import "RNPusherPushNotifications.h"
+    #import <RNPusherPushNotifications.h>
     // ..after @implements and before @end
     @property (nonatomic, strong) RNPusherPushNotifications *RNPusher;
 ```
 2. Open `AppDelegate.m` and add:
 ```aidl
-    // Inside didFinishLaunchingWithOptions, near the bottom (after rootView has been initialised)
-    self.RNPusher = [rootView.bridge moduleForName:@"RNPusherPushNotifications"];
-
     // Add the following as a new method to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-      [[self RNPusher] setDeviceToken:deviceToken];
+      [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] setDeviceToken:deviceToken];
     }
 ```
 
