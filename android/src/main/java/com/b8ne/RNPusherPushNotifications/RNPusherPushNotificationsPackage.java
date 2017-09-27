@@ -17,7 +17,7 @@ public class RNPusherPushNotificationsPackage implements ReactPackage {
       return Arrays.<NativeModule>asList(new RNPusherPushNotificationsModule(reactContext));
     }
 
-    @Override
+    // Deprecated in RN 0.47
     public List<Class<? extends JavaScriptModule>> createJSModules() {
       return Collections.emptyList();
     }
