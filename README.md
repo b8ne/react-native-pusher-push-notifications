@@ -45,7 +45,7 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 
 1. After package installation open `AppDelegate.h` and add:
 ```aidl
-    #import "RNPusherPushNotifications.h"
+    #import <RNPusherPushNotifications.h>
     // ..after @implements and before @end
     @property (nonatomic, strong) RNPusherPushNotifications *RNPusher;
 ```
