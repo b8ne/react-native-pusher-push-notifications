@@ -19,7 +19,7 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(setAppKey:(NSString *)appKey)
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
         RCTLogInfo(@"Creating pusher with App Key: %@", appKey);
         // Pusher init
         self.pusher = [PTPusher pusherWithKey:appKey delegate:self encrypted:YES];
