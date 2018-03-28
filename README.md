@@ -51,9 +51,16 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 ```
 2. Open `AppDelegate.m` and add:
 ```aidl
-    // Add the following as a new method to AppDelegate.m
+    // Inside didFinishLaunchingWithOptions, near the bottom (after rootView has been initialised)
+    self.RNPusher = [rootView.bridge moduleForName:@"RNPusherPushNotifications"];
+
+    // Add the following as a new methods to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
       [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] setDeviceToken:deviceToken];
+    }
+
+    - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification {
+      [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] handleNotification:notification];
     }
 ```
 
@@ -71,9 +78,14 @@ RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY);
 if (Platform.OS === 'ios') {
   // iOS must wait for rego
   RNPusherPushNotifications.on('registered', initInterests)
+  RNPusherPushNotifications.on('notification', handleNotification)
 } else {
   // Android is immediate
   initInterests()
+}
+
+function handleNotification(notification) {
+  console.log('# ', notification)
 }
 
 function initInterests() {
@@ -85,8 +97,8 @@ function initInterests() {
         // Android is better, so handle faults
         RNPusherPushNotifications.subscribe(
             interest,
-            (error) => {
-                console.error(error);
+            (statusCode, response) => {
+                console.error(statusCode, response);
             },
             (success) => {
                 console.log(success);
@@ -103,8 +115,8 @@ if (Platform.OS === 'ios') {
     // Android is better, so handle faults
     RNPusherPushNotifications.unsubscribe(
         interest,
-        (error) => {
-            console.error(error);
+        (statusCode, response) => {
+            console.error(statusCode, response);
         },
         (success) => {
             console.log(success);

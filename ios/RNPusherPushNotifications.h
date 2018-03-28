@@ -3,6 +3,7 @@
 #else
   #import "RCTBridgeModule.h"
 #endif
+
 #import <React/RCTEventEmitter.h>
 #import <Pusher/Pusher.h>
 
@@ -11,8 +12,7 @@
 @property (nonatomic) PTPusher *pusher;
 
 -(void)setDeviceToken:(NSData *)deviceToken;
+-(void)handleNotification:(NSDictionary *)notification;
 
 @end
-
-
   

@@ -1,10 +1,17 @@
 package com.b8ne.RNPusherPushNotifications;
 
 import android.util.Log;
-
+import java.util.Map;
+import org.json.JSONObject;
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.android.PusherAndroid;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.pusher.android.notifications.PushNotificationRegistration;
 import com.pusher.android.notifications.fcm.FCMPushNotificationReceivedListener;
 import com.pusher.android.notifications.interests.InterestSubscriptionChangeListener;
@@ -16,6 +23,7 @@ import com.pusher.android.notifications.tokens.PushNotificationRegistrationListe
 
 public class PusherWrapper {
     private static PushNotificationRegistration nativePusher;
+    private String notificationEvent = "notification";
 
     public PusherWrapper(String appKey) {
         Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
@@ -26,7 +34,7 @@ public class PusherWrapper {
         }
     }
 
-    public PusherWrapper(String appKey, ReactContext context) {
+    public PusherWrapper(String appKey, final ReactContext context) {
       Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
       System.out.print("Creating Pusher with App Key: " + appKey);
         if (nativePusher == null) {
@@ -51,8 +59,13 @@ public class PusherWrapper {
             nativePusher.setFCMListener(new FCMPushNotificationReceivedListener() {
                 @Override
                 public void onMessageReceived(RemoteMessage remoteMessage) {
-                    RemoteMessage temp = remoteMessage;
-                    Log.d("PUSHER_WRAPPER", remoteMessage.toString());
+                    WritableMap map = Arguments.createMap();
+                    Map<String, String> messageMap = remoteMessage.getData();
+                    for(Map.Entry<String, String> entry : messageMap.entrySet()) {
+                      map.putString(entry.getKey(), entry.getValue());
+                    }
+                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
+
                     System.out.print(remoteMessage.toString());
                 }
             });
@@ -67,7 +80,7 @@ public class PusherWrapper {
         return this.nativePusher;
     }
 
-    public void subscribe(final String interest) {
+    public void subscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
         Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  interest);
         System.out.print("Attempting to subscribe to " +  interest);
         nativePusher.subscribe(interest, new InterestSubscriptionChangeListener() {
@@ -75,28 +88,32 @@ public class PusherWrapper {
             public void onSubscriptionChangeSucceeded() {
                 Log.d("PUSHER_WRAPPER", "Success! " + interest);
                 System.out.print("Success! " + interest);
+                successCallback.invoke();
             }
 
             @Override
             public void onSubscriptionChangeFailed(int statusCode, String response) {
                 Log.d("PUSHER_WRAPPER", ":(: received " + statusCode + " with" + response);
                 System.out.print(":(: received " + statusCode + " with" + response);
+                errorCallback.invoke(statusCode, response);
             }
         });
     }
 
-    public void unsubscribe(final String interest) {
+    public void unsubscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
         nativePusher.unsubscribe(interest, new InterestSubscriptionChangeListener() {
             @Override
             public void onSubscriptionChangeSucceeded() {
               Log.d("PUSHER_WRAPPER", "Success! " + interest);
               System.out.print("Success! " + interest);
+              successCallback.invoke();
             }
 
             @Override
             public void onSubscriptionChangeFailed(int statusCode, String response) {
                 Log.d("PUSHER_WRAPPER", ":(: received " + statusCode + " with" + response);
                 System.out.print(":(: received " + statusCode + " with" + response);
+                errorCallback.invoke(statusCode, response);
             }
         });
     }
