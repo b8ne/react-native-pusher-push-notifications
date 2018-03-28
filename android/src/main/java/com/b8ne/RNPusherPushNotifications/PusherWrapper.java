@@ -23,7 +23,7 @@ import com.pusher.android.notifications.tokens.PushNotificationRegistrationListe
 
 public class PusherWrapper {
     private static PushNotificationRegistration nativePusher;
-    private String registeredEvent = "registered"
+    private String registeredEvent = "registered";
     private String notificationEvent = "notification";
 
     public PusherWrapper(String appKey) {
