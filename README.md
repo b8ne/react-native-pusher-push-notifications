@@ -88,41 +88,29 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 
   // Subscribe to an interest
   const subscribe = (interest) => {
-    // Subscribe to push notifications
-      if (Platform.OS === 'ios') {
-          // iOS callbacks are beta, so dont use them
-          RNPusherPushNotifications.subscribe(interest);
-      } else {
-          // Android is better, so handle faults
-          RNPusherPushNotifications.subscribe(
-              interest,
-              (statusCode, response) => {
-                  console.error(statusCode, response);
-              },
-              () => {
-                  console.log("Success");
-              }
-          );
-      }
+    // Note that only Android devices will respond to success/error callbacks
+    RNPusherPushNotifications.subscribe(
+        interest,
+        (statusCode, response) => {
+            console.error(statusCode, response);
+        },
+        () => {
+            console.log("Success");
+        }
+    );
   };
 
   // Unsubscribe an interest
   const unsubscribe = (interest) => {
-    // Unsubscribe from push notifications
-    if (Platform.OS === 'ios') {
-        // iOS callbacks are beta, so dont use them
-        RNPusherPushNotifications.unsubscribe(interest);
-    } else {
-        // Android is better, so handle faults
-        RNPusherPushNotifications.unsubscribe(
-            interest,
-            (statusCode, response) => {
-                console.error(statusCode, response);
-            },
-            () => {
-                console.log("Success");
-            }
-        );
-    }
+    // Note that only Android devices will respond to success/error callbacks
+    RNPusherPushNotifications.unsubscribe(
+        interest,
+        (statusCode, response) => {
+            console.error(statusCode, response);
+        },
+        () => {
+            console.log("Success");
+        }
+    );
   };
 ```
