@@ -1,6 +1,6 @@
 'use strict';
 
-import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
+import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 const { RNPusherPushNotifications } = NativeModules
 const rnPusherPushNotificationsEmitter = new NativeEventEmitter(RNPusherPushNotifications)
 
@@ -26,9 +26,13 @@ export default {
     }
   },
   on: (eventName, callback) => {
-    rnPusherPushNotificationsEmitter.addListener(
-      eventName,
-      (payload) => callback(payload)
-    )
+    if (Platform.OS === 'ios') {
+      rnPusherPushNotificationsEmitter.addListener(
+        eventName,
+        (payload) => callback(payload)
+      )
+    } else {
+      DeviceEventEmitter.addListener(eventName, (payload) => callback(payload));
+    }
   }
 };
