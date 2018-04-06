@@ -23,6 +23,7 @@ import com.pusher.android.notifications.tokens.PushNotificationRegistrationListe
 
 public class PusherWrapper {
     private static PushNotificationRegistration nativePusher;
+    private String registeredEvent = "registered";
     private String notificationEvent = "notification";
 
     public PusherWrapper(String appKey) {
@@ -48,6 +49,7 @@ public class PusherWrapper {
                 public void onSuccessfulRegistration() {
                     Log.d("PUSHER_WRAPPER", "Successfully registered to FCM");
                     System.out.print("Successfully registered to FCM");
+                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(registeredEvent, null);
                 }
 
                 @Override
@@ -64,9 +66,9 @@ public class PusherWrapper {
                     for(Map.Entry<String, String> entry : messageMap.entrySet()) {
                       map.putString(entry.getKey(), entry.getValue());
                     }
-                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
-
+                    Log.d("PUSHER_WRAPPER", "FCM notification received");
                     System.out.print(remoteMessage.toString());
+                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
                 }
             });
 

@@ -52,7 +52,7 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 2. Open `AppDelegate.m` and add:
 ```aidl
     // Inside didFinishLaunchingWithOptions, near the bottom (after rootView has been initialised)
-    self.RNPusher = [rootView.bridge moduleForName:@"RNPusherPushNotifications"];
+    self.RNPusher = [((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"];
 
     // Add the following as a new methods to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -66,61 +66,51 @@ IMPORTANT!!! This module is intended to complement the default [Pusher setup](ht
 
 ## Usage
 ```javascript
-// Import module
-import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
+  // Import module
+  import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
-// Get your interest
-const interest = "donuts";
+  // Get your interest
+  const donutsInterest = "donuts";
 
-// Set your app key and register for push
-RNPusherPushNotifications.setAppKey(ENV.PUSHER_APP_KEY);
+  // Set your app key and register for push
+  RNPusherPushNotifications.setAppKey(CONSTANTS.PUSHER_APP_KEY);
 
-if (Platform.OS === 'ios') {
-  // iOS must wait for rego
-  RNPusherPushNotifications.on('registered', initInterests)
-  RNPusherPushNotifications.on('notification', handleNotification)
-} else {
-  // Android is immediate
-  initInterests()
-}
+  // Init interests after registration
+  RNPusherPushNotifications.on('registered', subscribe(donutsInterest));
 
-function handleNotification(notification) {
-  console.log('# ', notification)
-}
+  // Setup notification listeners
+  RNPusherPushNotifications.on('notification', handleNotification);
 
-function initInterests() {
-    // Subscribe to push notifications
-    if (Platform.OS === 'ios') {
-        // iOS callbacks are beta, so dont use them
-        RNPusherPushNotifications.subscribe(interest);
-    } else {
-        // Android is better, so handle faults
-        RNPusherPushNotifications.subscribe(
-            interest,
-            (statusCode, response) => {
-                console.error(statusCode, response);
-            },
-            (success) => {
-                console.log(success);
-            }
-        );
-    }
-}
+  // Handle notifications received
+  const handleNotification = (notification) => {
+    console.log(notification);
+  };
 
-// Unsubscribe from push notifications
-if (Platform.OS === 'ios') {
-    // iOS callbacks are beta, so dont use them
-    RNPusherPushNotifications.unsubscribe(interest);
-} else {
-    // Android is better, so handle faults
+  // Subscribe to an interest
+  const subscribe = (interest) => {
+    // Note that only Android devices will respond to success/error callbacks
+    RNPusherPushNotifications.subscribe(
+        interest,
+        (statusCode, response) => {
+            console.error(statusCode, response);
+        },
+        () => {
+            console.log("Success");
+        }
+    );
+  };
+
+  // Unsubscribe an interest
+  const unsubscribe = (interest) => {
+    // Note that only Android devices will respond to success/error callbacks
     RNPusherPushNotifications.unsubscribe(
         interest,
         (statusCode, response) => {
             console.error(statusCode, response);
         },
-        (success) => {
-            console.log(success);
+        () => {
+            console.log("Success");
         }
     );
-}
+  };
 ```

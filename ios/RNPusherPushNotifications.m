@@ -41,7 +41,6 @@ RCT_EXPORT_METHOD(subscribe:(NSString *)interest)
 
 RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest)
 {
-
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       RCTLogInfo(@"Unsubscribing from: %@", interest);
       [[[self pusher] nativePusher] unsubscribe:(NSString *)interest];
