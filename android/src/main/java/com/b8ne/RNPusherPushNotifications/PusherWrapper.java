@@ -62,13 +62,21 @@ public class PusherWrapper {
                 @Override
                 public void onMessageReceived(RemoteMessage remoteMessage) {
                     WritableMap map = Arguments.createMap();
-                    Map<String, String> messageMap = remoteMessage.getData();
-                    for(Map.Entry<String, String> entry : messageMap.entrySet()) {
-                      map.putString(entry.getKey(), entry.getValue());
+                    RemoteMessage.Notification notification = remoteMessage.getNotification();
+
+                    if(notification !== null) {
+                        map.putString("body", notification.getBody());
+                        map.putString("title", notification.getTitle());
+                        map.putString("tag", notification.getTag());
+                        map.putString("click_action", notification.getClickAction());
+                        map.putString("icon", notification.getIcon());
+
+                        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
+                        System.out.print(remoteMessage.toString());
                     }
-                    Log.d("PUSHER_WRAPPER", "FCM notification received");
-                    System.out.print(remoteMessage.toString());
-                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
+                    else {
+                        Log.d("PUSHER_WRAPPER", "No notification received");
+                    }
                 }
             });
 
