@@ -1,6 +1,6 @@
 {
   "name": "react-native-pusher-push-notifications",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Manage pusher channel subscriptions from within React Native JS",
   "main": "index.js",
   "scripts": {
