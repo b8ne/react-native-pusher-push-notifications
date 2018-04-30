@@ -64,7 +64,7 @@ public class PusherWrapper {
                     WritableMap map = Arguments.createMap();
                     RemoteMessage.Notification notification = remoteMessage.getNotification();
 
-                    if(notification !== null) {
+                    if(notification != null) {
                         map.putString("body", notification.getBody());
                         map.putString("title", notification.getTitle());
                         map.putString("tag", notification.getTag());
