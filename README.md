@@ -1,13 +1,24 @@
 # react-native-pusher-push-notifications
+
 Manage pusher interest subscriptions from within React Native JS
 
-IMPORTANT!!! This module is intended to complement the default [Pusher setup](https://pusher.com/docs/push_notifications).  This module simply allows that implementation to be accessed directly from React Native JS.
+**IMPORTANT!!!**
+
+This module is intended to complement the default [Pusher Carthage setup](https://docs.pusher.com/beams/ios/sdk-integration#install-from-carthage). This module simply allows that implementation to be accessed directly from React Native JS.
+
+More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
+
+There are some issues installing this repo you need to be aware of. More info can be found in [issue 65](https://github.com/pusher/push-notifications-swift/issues/65).
 
 [![npm version](https://badge.fury.io/js/react-native-pusher-push-notifications.svg)](https://badge.fury.io/js/react-native-pusher-push-notifications)
 
 ## Getting started
 
 `$ npm install react-native-pusher-push-notifications --save`
+
+or yarn
+
+`$ yarn add react-native-pusher-push-notifications`
 
 ### Mostly automatic installation
 
