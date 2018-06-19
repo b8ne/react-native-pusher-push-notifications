@@ -3,6 +3,7 @@
 #import "UIKit/UIKit.h"
 #import <UIKit/UIKit.h>
 #import "RCTLog.h"
+@import PushNotifications;
 
 @implementation RNPusherPushNotifications
 
@@ -21,13 +22,8 @@ RCT_EXPORT_METHOD(setAppKey:(NSString *)appKey)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         RCTLogInfo(@"Creating pusher with App Key: %@", appKey);
-        // Pusher init
-        self.pusher = [PTPusher pusherWithKey:appKey delegate:self encrypted:YES];
-        UIUserNotificationType notificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound;
-        UIUserNotificationSettings *pushNotificationSettings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories: NULL];
-        [[UIApplication sharedApplication ] registerUserNotificationSettings:pushNotificationSettings];
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
-
+        [[PushNotifications shared] startWithInstanceId:appKey];
+        [[PushNotifications shared] registerForRemoteNotifications];
     });
 }
 
@@ -35,7 +31,10 @@ RCT_EXPORT_METHOD(subscribe:(NSString *)interest)
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         RCTLogInfo(@"Subscribing to: %@", interest);
-        [[[self pusher] nativePusher] subscribe:(NSString *)interest];
+        NSError *anyError;
+        [[PushNotifications shared] subscribeWithInterest:interest error:&anyError completion:^{
+          RCTLogInfo(@"Subscribed to interest: %@", interest);
+        }];
     });
 }
 
@@ -43,23 +42,26 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest)
 {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       RCTLogInfo(@"Unsubscribing from: %@", interest);
-      [[[self pusher] nativePusher] unsubscribe:(NSString *)interest];
+      NSError *anyError;
+      [[PushNotifications shared] unsubscribeWithInterest:interest error:&anyError completion:^{
+        RCTLogInfo(@"Unsubscribed from interest: %@", interest);
+      }];
   });
 }
 
 - (void)handleNotification:(NSDictionary *)notification
 {
     [self sendEventWithName:@"notification" body:notification];
+    [[PushNotifications shared] handleNotificationWithUserInfo:notification];
 }
 
 - (void)setDeviceToken:(NSData *)deviceToken
 {
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
-    [[[self pusher] nativePusher] registerWithDeviceToken:deviceToken];
-    
-    RCTLogInfo(@"SEND REGISTERED");
-
-    [self sendEventWithName:@"registered" body:@{}];
+    [[PushNotifications shared] registerDeviceToken:deviceToken completion:^{
+      RCTLogInfo(@"SEND REGISTERED");
+      [self sendEventWithName:@"registered" body:@{}];
+    }];
 }
 
 @end

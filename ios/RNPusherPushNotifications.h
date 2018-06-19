@@ -5,14 +5,10 @@
 #endif
 
 #import <React/RCTEventEmitter.h>
-#import <Pusher/Pusher.h>
 
-@interface RNPusherPushNotifications : RCTEventEmitter <RCTBridgeModule, PTPusherDelegate>
-
-@property (nonatomic) PTPusher *pusher;
+@interface RNPusherPushNotifications : RCTEventEmitter <RCTBridgeModule>
 
 -(void)setDeviceToken:(NSData *)deviceToken;
 -(void)handleNotification:(NSDictionary *)notification;
 
 @end
-  
