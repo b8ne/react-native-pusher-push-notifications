@@ -9,6 +9,6 @@
 @interface RNPusherPushNotifications : RCTEventEmitter <RCTBridgeModule>
 
 -(void)setDeviceToken:(NSData *)deviceToken;
--(void)handleNotification:(NSDictionary *)notification;
+-(void)handleNotification:(NSDictionary *)userInfo;
 
 @end
