@@ -4,7 +4,7 @@ Manage pusher interest subscriptions from within React Native JS
 
 **IMPORTANT!!!**
 
-This module is intended to complement the default [Pusher Carthage setup](https://docs.pusher.com/beams/ios/sdk-integration#install-from-carthage). This module simply allows that implementation to be accessed directly from React Native JS.
+This module is intended to complement the setup with [Carthage](https://docs.pusher.com/beams/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
 
 More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
 
@@ -28,9 +28,9 @@ or yarn
 
 #### iOS
 
-1.  In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+1.  In Xcode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2.  Go to `node_modules` ➜ `react-native-pusher-push-notifications` and add `RNPusherPushNotifications.xcodeproj`
-3.  In XCode, in the project navigator, select your project. Add `libRNPusherPushNotifications.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+3.  In Xcode, in the project navigator, select your project. Add `libRNPusherPushNotifications.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 4.  Run your project (`Cmd+R`)<
 
 #### Android
