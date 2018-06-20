@@ -18,67 +18,65 @@ RCT_EXPORT_MODULE()
     return @[@"registered", @"notification"];
 }
 
-RCT_EXPORT_METHOD(getInterests:(RCTResponseSenderBlock)callback) {
-  NSArray *interests = [[PushNotifications shared] getInterests];
-  callback(@[[NSNull null], interests]);
-}
-
 RCT_EXPORT_METHOD(setInstanceId:(NSString *)instanceId)
 {
-  RCTLogInfo(@"Creating pusher with Instance ID: %@", instanceId);
-  [[PushNotifications shared] startWithInstanceId:instanceId];
-  [[PushNotifications shared] registerForRemoteNotifications];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    RCTLogInfo(@"Creating pusher with Instance ID: %@", instanceId);
+
+    [[PushNotifications shared] startWithInstanceId:instanceId];
+    [[PushNotifications shared] registerForRemoteNotifications];
+  });
 }
 
 RCT_EXPORT_METHOD(subscribe:(NSString *)interest callback:(RCTResponseSenderBlock)callback) {
-  NSError *anyError;
-  [[PushNotifications shared] subscribeWithInterest:interest error:&anyError completion:^{
-    if (anyError) {
-      callback(@[anyError, [NSNull null]]);
-    }
-    else {
-      RCTLogInfo(@"Subscribed to interest: %@", interest);
-    }
-  }];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    NSError *anyError;
+    [[PushNotifications shared] subscribeWithInterest:interest error:&anyError completion:^{
+      if (anyError) {
+        callback(@[anyError, [NSNull null]]);
+      }
+      else {
+        RCTLogInfo(@"Subscribed to interest: %@", interest);
+      }
+    }];
+  });
 }
 
 RCT_EXPORT_METHOD(setSubscriptions:(NSArray *)interests callback:(RCTResponseSenderBlock)callback) {
-  NSError *anyError;
-  [[PushNotifications shared] setSubscriptionsWithInterests:interests error:&anyError completion:^{
-    if (anyError) {
-      callback(@[anyError, [NSNull null]]);
-    }
-    else {
-      RCTLogInfo(@"Subscribed to interests: %@", interests);
-    }
-  }];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    NSError *anyError;
+    [[PushNotifications shared] setSubscriptionsWithInterests:interests error:&anyError completion:^{
+      if (anyError) {
+        callback(@[anyError, [NSNull null]]);
+      }
+      else {
+        RCTLogInfo(@"Subscribed to interests: %@", interests);
+      }
+    }];
+  });
 }
 
-RCT_EXPORT_METHOD(subscribe:(NSString *)interest)
-{
-  RCTLogInfo(@"Subscribing to: %@", interest);
-  NSError *anyError;
-  [[PushNotifications shared] subscribeWithInterest:interest error:&anyError completion:^{
-    RCTLogInfo(@"Subscribed to interest: %@", interest);
-  }];
-}
 
 RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBlock)callback) {
-  NSError *anyError;
-  [[PushNotifications shared] unsubscribeWithInterest:interest error:&anyError completion:^{
-    if (anyError) {
-      callback(@[anyError, [NSNull null]]);
-    }
-    else {
-      RCTLogInfo(@"Unsubscribed from interest: %@", interest);
-    }
-  }];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    NSError *anyError;
+    [[PushNotifications shared] unsubscribeWithInterest:interest error:&anyError completion:^{
+      if (anyError) {
+        callback(@[anyError, [NSNull null]]);
+      }
+      else {
+        RCTLogInfo(@"Unsubscribed from interest: %@", interest);
+      }
+    }];
+  });
 }
 
 RCT_EXPORT_METHOD(unsubscribeAll) {
-  [[PushNotifications shared] unsubscribeAllWithCompletion:^{
-    RCTLogInfo(@"Unsubscribed from all interests.");
-  }];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [[PushNotifications shared] unsubscribeAllWithCompletion:^{
+      RCTLogInfo(@"Unsubscribed from all interests.");
+    }];
+  });
 }
 
 - (void)handleNotification:(NSDictionary *)userInfo
