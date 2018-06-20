@@ -117,17 +117,21 @@ RNPusherPushNotifications.on('registered', () => subscribe(donutsInterest));
 // Setup notification listeners
 RNPusherPushNotifications.on('notification', handleNotification);
 
-// Unsubscribe an interest
-const unsubscribe = interest => {
-  // Note that only Android devices will respond to success/error callbacks
-  RNPusherPushNotifications.unsubscribe(
-    interest,
-    (statusCode, response) => {
-      console.error(statusCode, response);
-    },
-    () => {
-      console.log('Success');
-    }
-  );
-};
+// Unsubscribe from interest
+RNPusherPushNotifications.unsubscribe('interest-1', error => {}, success => {});
+```
+
+## iOS only methods
+
+```javascript
+// Subscribe to multiple interests with one request
+RNPusherPushNotifications.setSubScriptions(
+  ['interest-1', 'interest-2'],
+  error => {
+    console.log(error);
+  }
+);
+
+// Unsubscribe all interests
+RNPusherPushNotifications.unsubscribeAll();
 ```
