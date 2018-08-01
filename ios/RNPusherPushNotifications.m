@@ -1,4 +1,4 @@
-
+#import "RNPusherEventHelper.h"
 #import "RNPusherPushNotifications.h"
 #import "UIKit/UIKit.h"
 #import <UIKit/UIKit.h>
@@ -7,15 +7,11 @@
 
 @implementation RNPusherPushNotifications
 
+RCT_EXPORT_MODULE();
+
 - (dispatch_queue_t)methodQueue
 {
   return dispatch_get_main_queue();
-}
-RCT_EXPORT_MODULE()
-
-- (NSArray<NSString *> *)supportedEvents
-{
-    return @[@"registered", @"notification"];
 }
 
 RCT_EXPORT_METHOD(setInstanceId:(NSString *)instanceId)
@@ -56,7 +52,6 @@ RCT_EXPORT_METHOD(setSubscriptions:(NSArray *)interests callback:(RCTResponseSen
   });
 }
 
-
 RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBlock)callback) {
   dispatch_async(dispatch_get_main_queue(), ^{
     NSError *anyError;
@@ -71,18 +66,11 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
   });
 }
 
-RCT_EXPORT_METHOD(unsubscribeAll) {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [[PushNotifications shared] unsubscribeAllWithCompletion:^{
-      RCTLogInfo(@"Unsubscribed from all interests.");
-    }];
-  });
-}
-
 - (void)handleNotification:(NSDictionary *)userInfo
 {
     RCTLogInfo(@"handleNotification: %@", userInfo);
-    [self sendEventWithName:@"notification" body:userInfo];
+    //[self sendEventWithName:@"notification" body:userInfo];
+    [RNPusherEventHelper emitEventWithName:@"notification" andPayload:@{@"userInfo":userInfo}];
     [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
 }
 
@@ -90,8 +78,9 @@ RCT_EXPORT_METHOD(unsubscribeAll) {
 {
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
     [[PushNotifications shared] registerDeviceToken:deviceToken completion:^{
-      RCTLogInfo(@"SEND REGISTERED");
-      [self sendEventWithName:@"registered" body:@{}];
+        [RNPusherEventHelper emitEventWithName:@"registered" andPayload:@{}];
+        //[self sendEventWithName:@"registered" body:@{@"deviceToken": deviceToken}];
+        RCTLogInfo(@"REGISTERED!");
     }];
 }
 
