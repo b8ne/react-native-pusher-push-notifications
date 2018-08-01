@@ -20,9 +20,9 @@ or yarn
 
 `$ yarn add react-native-pusher-push-notifications`
 
-### Mostly automatic installation
+### Automatic installation
 
-`$ react-native link react-native-pusher-push-notifications`
+React native link has shown to incorrectly setup projects, so follow the manual instructions below.
 
 ### Manual installation
 
@@ -31,28 +31,6 @@ or yarn
 1.  In Xcode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2.  Go to `node_modules` ➜ `react-native-pusher-push-notifications` and add `RNPusherPushNotifications.xcodeproj`
 3.  In Xcode, in the project navigator, select your project. Add `libRNPusherPushNotifications.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4.  Run your project (`Cmd+R`)<
-
-#### Android
-
-1.  Open up `android/app/src/main/java/[...]/MainActivity.java`
-
-- Add `import com.reactlibrary.RNPusherPushNotificationsPackage;` to the imports at the top of the file
-- Add `new RNPusherPushNotificationsPackage()` to the list returned by the `getPackages()` method
-
-2.  Append the following lines to `android/settings.gradle`:
-    ```
-    include ':react-native-pusher-push-notifications'
-    project(':react-native-pusher-push-notifications').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-react-native-pusher-push-notifications/android')
-    ```
-3.  Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-    ```
-      compile project(':react-native-pusher-push-notifications')
-    ```
-
-### All installations
-
-#### iOS
 
 ** DO NOT follow the pusher.com push notification docs that detail modifying the AppDelegate.h/m files! - this package takes care of most of the steps for you**
 
@@ -67,18 +45,25 @@ or yarn
 2.  Open `AppDelegate.m` and add:
 
 ```aidl
-    // Inside didFinishLaunchingWithOptions, near the bottom (after rootView has been initialised)
-    self.RNPusher = [((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"];
-
     // Add the following as a new methods to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-      [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] setDeviceToken:deviceToken];
+      NSLog(@"Registered for remote with token: %@", deviceToken);
+      [[RNPusherPushNotifications alloc] setDeviceToken:deviceToken];
     }
-
+    
     - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-  [[((RCTRootView *) self.window.rootViewController.view).bridge moduleForName:@"RNPusherPushNotifications"] handleNotification:userInfo];
-}
+      [[RNPusherPushNotifications alloc] handleNotification:userInfo];
+    }
+    
+    -(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+      NSLog(@"Remote notification support is unavailable due to error: %@", error.localizedDescription);
+    }
 ```
+
+#### Android
+
+COMING SOON
+
 
 ## Usage
 
@@ -87,7 +72,21 @@ or yarn
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
 // Get your interest
-const donutsInterest = 'donuts';
+const donutsInterest = 'debug-donuts';
+
+// Initialize notifications
+export const init = () => {
+    // Set your app key and register for push
+    RNPusherPushNotifications.setInstanceId(CONSTANTS.PUSHER_INSTANCE_ID);
+
+	// Init interests after registration
+	RNPusherPushNotifications.on('registered', () => {
+        subscribe(donutsInterest);
+    });
+
+	// Setup notification listeners
+	RNPusherPushNotifications.on('notification', handleNotification);
+};
 
 // Handle notifications received
 const handleNotification = notification => {
@@ -108,30 +107,42 @@ const subscribe = interest => {
   );
 };
 
-// Set your app key and register for push
-RNPusherPushNotifications.setInstanceId(CONSTANTS.PUSHER_BEAMS_INSTANCE_ID);
-
-// Init interests after registration
-RNPusherPushNotifications.on('registered', () => subscribe(donutsInterest));
-
-// Setup notification listeners
-RNPusherPushNotifications.on('notification', handleNotification);
-
-// Unsubscribe from interest
-RNPusherPushNotifications.unsubscribe('interest-1', error => {}, success => {});
+// Unsubscribe from an interest
+const unsubscribe = (interest) => {
+    RNPusherPushNotifications.unsubscribe(
+        interest,
+        (statusCode, response) => {
+            console.tron.logImportant(statusCode, response);
+        },
+        () => {
+            console.tron.logImportant("Success");
+        }
+    );
+};
 ```
 
 ## iOS only methods
 
 ```javascript
-// Subscribe to multiple interests with one request
-RNPusherPushNotifications.setSubScriptions(
-  ['interest-1', 'interest-2'],
-  error => {
-    console.log(error);
-  }
-);
-
-// Unsubscribe all interests
-RNPusherPushNotifications.unsubscribeAll();
+// Set interests
+const donutInterests = ['debug-donuts', 'debug-general'];
+const setSubscriptions = donutInterests => {
+  // Note that only Android devices will respond to success/error callbacks
+  RNPusherPushNotifications.setSubscriptions(
+    donutInterests,
+    (statusCode, response) => {
+      console.error(statusCode, response);
+    },
+    () => {
+      console.log('Success');
+    }
+  );
+};
 ```
+
+## Troubleshooting
+1. `dyld: Library not loaded: @rpath/PushNotifications.framework/PushNotifications`
+Ensure the PushNotifications.framework library is added to `General => Embedded Binaries`
+
+2. `dyld: Library not loaded: @rpath/libswiftCore.dylib`
+Ensure `Build Settings => Always Embed Swift Standard Libraries` is set to `Yes` and a valid Development provisioning profile exists on your system.

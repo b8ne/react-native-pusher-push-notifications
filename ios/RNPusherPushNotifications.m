@@ -25,6 +25,7 @@ RCT_EXPORT_METHOD(setInstanceId:(NSString *)instanceId)
 }
 
 RCT_EXPORT_METHOD(subscribe:(NSString *)interest callback:(RCTResponseSenderBlock)callback) {
+  RCTLogInfo(@"Subscribing to interest: %@", interest);
   dispatch_async(dispatch_get_main_queue(), ^{
     NSError *anyError;
     [[PushNotifications shared] subscribeWithInterest:interest error:&anyError completion:^{
@@ -69,7 +70,6 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
 - (void)handleNotification:(NSDictionary *)userInfo
 {
     RCTLogInfo(@"handleNotification: %@", userInfo);
-    //[self sendEventWithName:@"notification" body:userInfo];
     [RNPusherEventHelper emitEventWithName:@"notification" andPayload:@{@"userInfo":userInfo}];
     [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
 }
@@ -79,7 +79,6 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
     [[PushNotifications shared] registerDeviceToken:deviceToken completion:^{
         [RNPusherEventHelper emitEventWithName:@"registered" andPayload:@{}];
-        //[self sendEventWithName:@"registered" body:@{@"deviceToken": deviceToken}];
         RCTLogInfo(@"REGISTERED!");
     }];
 }
