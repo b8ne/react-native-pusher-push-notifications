@@ -34,15 +34,7 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 
 ** DO NOT follow the pusher.com push notification docs that detail modifying the AppDelegate.h/m files! - this package takes care of most of the steps for you**
 
-1.  After package installation open `AppDelegate.h` and add:
-
-```aidl
-    #import <RNPusherPushNotifications.h>
-    // ..after @implements and before @end
-    @property (nonatomic, strong) RNPusherPushNotifications *RNPusher;
-```
-
-2.  Open `AppDelegate.m` and add:
+1.  Open `AppDelegate.m` and add:
 
 ```aidl
     // Add the following as a new methods to AppDelegate.m
