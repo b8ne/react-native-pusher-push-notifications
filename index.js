@@ -5,9 +5,9 @@ import {
   Platform,
 } from 'react-native';
 
-const { RNPusherPushNotifications } = NativeModules;
+const { RNPusherPushNotifications, RNPusherEventHelper } = NativeModules;
 const rnPusherPushNotificationsEmitter = new NativeEventEmitter(
-  RNPusherPushNotifications
+    RNPusherEventHelper
 );
 
 const errorCallback = callback => (statusCode, response) =>
@@ -49,13 +49,6 @@ export default {
         errorCallback(onError),
         successCallback(onSuccess)
       );
-    }
-  },
-  unsubscribeAll: (onError, onSuccess) => {
-    if (Platform.OS === 'ios') {
-      RNPusherPushNotifications.unsubscribeAll();
-    } else {
-      console.log('Not implemented yet');
     }
   },
   on: (eventName, callback) => {
