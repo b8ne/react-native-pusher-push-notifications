@@ -37,6 +37,9 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 1.  Open `AppDelegate.m` and add:
 
 ```aidl
+    // Add this at the top of AppDelegate.m
+    #import "RNPusherPushNotifications.h"
+    
     // Add the following as a new methods to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
       NSLog(@"Registered for remote with token: %@", deviceToken);
