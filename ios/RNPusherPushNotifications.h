@@ -1,18 +1,8 @@
-#if __has_include(<React/RCTBridgeModule.h>)
-  #import <React/RCTBridgeModule.h>
-#else
-  #import "RCTBridgeModule.h"
-#endif
+#import <React/RCTBridgeModule.h>
 
-#import <React/RCTEventEmitter.h>
-#import <Pusher/Pusher.h>
-
-@interface RNPusherPushNotifications : RCTEventEmitter <RCTBridgeModule, PTPusherDelegate>
-
-@property (nonatomic) PTPusher *pusher;
+@interface RNPusherPushNotifications : NSObject <RCTBridgeModule>
 
 -(void)setDeviceToken:(NSData *)deviceToken;
--(void)handleNotification:(NSDictionary *)notification;
+-(void)handleNotification:(NSDictionary *)userInfo;
 
 @end
-  
