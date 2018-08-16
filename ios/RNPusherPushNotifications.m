@@ -69,8 +69,31 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
 
 - (void)handleNotification:(NSDictionary *)userInfo
 {
+    UIApplicationState state = [UIApplication sharedApplication].applicationState;
+
+    NSString *appState = @"active";
     RCTLogInfo(@"handleNotification: %@", userInfo);
-    [RNPusherEventHelper emitEventWithName:@"notification" andPayload:@{@"userInfo":userInfo}];
+
+    if ( state == UIApplicationStateActive)
+    {
+        RCTLogInfo(@"1. App is foreground and notification is recieved. Show a alert.");
+    }
+    else if( state == UIApplicationStateBackground)
+    {
+        RCTLogInfo(@"2. App is in background and notification is received. You can fetch required data here don't do anything with UI.");
+        appState = @"background";
+    }
+    else if( state == UIApplicationStateInactive)
+    {
+        RCTLogInfo(@"3. App came in foreground by used clicking on notification. Use userinfo for redirecting to specific view controller.");
+        appState = @"inactive";
+    }
+
+    [RNPusherEventHelper emitEventWithName:@"notification" andPayload:@{
+      @"userInfo":userInfo,
+      @"appState":appState
+    }];
+
     [[PushNotifications shared] handleNotificationWithUserInfo:userInfo];
 }
 
