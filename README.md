@@ -150,6 +150,22 @@ const setSubscriptions = donutInterests => {
 };
 ```
 
+## Increment Badge number
+
+The APS data sent to Pusher Beams and then to Apple have an option `badge`. This will update your apps badge counter to the current number. If you send 1, the badge will show 1. This means you need to handle notification read status in your backend and when pushing update to the current number.
+
+By adding `incrementBadge` you can increment the badge number without having to deal with your backend.
+
+```
+{
+  aps: {
+    data: {
+      incrementBadge: true
+    }
+  }
+}
+```
+
 ## Troubleshooting
 
 1.  `dyld: Library not loaded: @rpath/PushNotifications.framework/PushNotifications`

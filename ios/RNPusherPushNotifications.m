@@ -89,6 +89,12 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
         appState = @"inactive";
     }
 
+    if((bool)[userInfo valueForKeyPath:@"aps.data.incrementBadge"]) {
+        NSInteger badgeCount = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = (badgeCount+1);
+        RCTLogInfo(@"increment badge number too: %ld", (long)( badgeCount+1 ));
+    }
+
     [RNPusherEventHelper emitEventWithName:@"notification" andPayload:@{
       @"userInfo":userInfo,
       @"appState":appState
