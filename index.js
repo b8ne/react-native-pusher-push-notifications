@@ -26,11 +26,7 @@ export default {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.subscribe(channel, onError);
     } else {
-      RNPusherPushNotifications.subscribe(
-        channel,
-        errorCallback(onError),
-        successCallback(onSuccess)
-      );
+      RNPusherPushNotifications.subscribe(channel);
     }
   },
   setSubscriptions: (interests, onError) => {
@@ -45,9 +41,7 @@ export default {
       RNPusherPushNotifications.unsubscribe(channel, onError);
     } else {
       RNPusherPushNotifications.unsubscribe(
-        channel,
-        errorCallback(onError),
-        successCallback(onSuccess)
+        channel
       );
     }
   },

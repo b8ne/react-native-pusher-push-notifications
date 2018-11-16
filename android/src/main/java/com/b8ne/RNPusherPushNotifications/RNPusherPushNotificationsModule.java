@@ -1,11 +1,11 @@
 
 package com.b8ne.RNPusherPushNotifications;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Callback;
 
 
@@ -17,18 +17,38 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
   private PusherWrapper pusher;
 
   public RNPusherPushNotificationsModule(ReactApplicationContext reactContext) {
-    super(reactContext);
-    this.reactContext = reactContext;
+      super(reactContext);
+      this.reactContext = reactContext;
   }
+
+  private final LifecycleEventListener lifecycleEventListener = new LifecycleEventListener() {
+
+      @Override
+      public void onHostResume() {
+          pusher.onResume(getCurrentActivity());
+      }
+
+      @Override
+      public void onHostDestroy() {
+      }
+
+      @Override
+      public void onHostPause() {
+      }
+  };
+
 
   @Override
   public String getName() {
     return "RNPusherPushNotifications";
   }
 
+
   @ReactMethod
   public void setAppKey(String appKey) {
-    this.pusher = new PusherWrapper(appKey, this.reactContext);
+
+        this.pusher = new PusherWrapper(appKey, this.reactContext);
+        reactContext.addLifecycleEventListener(lifecycleEventListener);
   }
 
 //    @ReactMethod

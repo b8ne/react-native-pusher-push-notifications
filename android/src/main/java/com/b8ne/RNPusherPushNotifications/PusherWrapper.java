@@ -15,15 +15,11 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.firebase.messaging.RemoteMessage;
-//import com.pusher.android.PusherAndroid;
 import com.facebook.react.bridge.ReactApplicationContext;
-//import com.pusher.android.notifications.PushNotificationRegistration;
-//import com.pusher.android.notifications.fcm.FCMPushNotificationReceivedListener;
-//import com.pusher.android.notifications.interests.InterestSubscriptionChangeListener;
-//import com.pusher.android.notifications.tokens.PushNotificationRegistrationListener;
 
 import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotifications;
+import com.pusher.pushnotifications.PushNotificationsInstance;
 import com.pusher.pushnotifications.SubscriptionsChangedListener;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 
@@ -38,20 +34,28 @@ public class PusherWrapper {
     //private static PushNotificationRegistration nativePusher;
     private String registeredEvent = "registered";
     private String notificationEvent = "notification";
-
-    public PusherWrapper(String appKey) {
-        Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
-        System.out.print("Creating Pusher with App Key: " + appKey);
-//        if (nativePusher == null) {
-//            PusherAndroid pusher = new PusherAndroid(appKey);
-//            nativePusher = pusher.nativePusher();
-//        }
-    }
+    //private final PushNotificationsInstance pushNotifications;
+    private ReactContext context;
+//    public PusherWrapper(String appKey) {
+//        Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
+//        System.out.print("Creating Pusher with App Key: " + appKey);
+////        if (nativePusher == null) {
+////            PusherAndroid pusher = new PusherAndroid(appKey);
+////            nativePusher = pusher.nativePusher();
+////        }
+//    }
 
 
     public PusherWrapper(String appKey, final ReactContext context) {
-      Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
-      System.out.print("Creating Pusher with App Key: " + appKey);
+        Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
+        System.out.print("Creating Pusher with App Key: " + appKey);
+
+        // the new-ed version of PushNotificationsInstance doesn't seem to have
+        // an instance of setOnMessageReceivedListenerForVisibleActivity, so
+        // use the singleton version.
+        //this.pushNotifications = new PushNotificationsInstance(context, appKey);
+        PushNotifications.start(context, appKey);
+        this.context = context;
         //if (nativePusher == null) {
             //PusherAndroid pusher = new PusherAndroid(appKey);
             //nativePusher = pusher.nativePusher();
@@ -102,6 +106,27 @@ public class PusherWrapper {
         }
     }
 
+    public void onResume(Activity activity) {
+        // SEE: https://docs.pusher.com/beams/reference/android
+        // TODO: Uncomment
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity, new PushNotificationReceivedListener() {
+            @Override
+            public void onMessageReceived(RemoteMessage remoteMessage) {
+                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
+                if (messagePayload == null) {
+                    // Message payload was not set for this notification
+                    Log.i("MainActivity", "Payload was missing");
+                } else {
+                    Log.i("MainActivity", messagePayload);
+                    // Now update the UI based on your message payload!
+                    // TODO: create a WriteableMap as above?
+                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, messagePayload);
+                }
+            }
+        });
+
+    }
+
 //    public PushNotificationRegistration getNativePusher() {
 //        return this.nativePusher;
 //    }
@@ -110,6 +135,7 @@ public class PusherWrapper {
         Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  interest);
         System.out.print("Attempting to subscribe to " +  interest);
         try {
+            //this.pushNotifications.subscribe(interest);
             PushNotifications.subscribe(interest);
             Log.d("PUSHER_WRAPPER", "Success! " + interest);
             System.out.print("Success! " + interest);
@@ -138,6 +164,7 @@ public class PusherWrapper {
     }
 
     public void unsubscribe(final String interest) {
+        //this.pushNotifications.unsubscribe(interest);
         PushNotifications.unsubscribe(interest);
 
 //        nativePusher.unsubscribe(interest, new InterestSubscriptionChangeListener() {
@@ -159,24 +186,30 @@ public class PusherWrapper {
 
     public void unsubscribeAll() {
         PushNotifications.unsubscribeAll();
+        //this.pushNotifications.unsubscribeAll();
     }
 
     public void getSubscriptions( final Callback subscriptionCallback) {
         Set<String> subscriptions = PushNotifications.getSubscriptions();
+        //Set<String> subscriptions = this.pushNotifications.getSubscriptions();
         subscriptionCallback.invoke(subscriptions);
     }
 
     public void setOnSubscriptionsChangedListener(final Callback subscriptionChangedListener) {
+
         PushNotifications.setOnSubscriptionsChangedListener(new SubscriptionsChangedListener() {
             @Override
             public void onSubscriptionsChanged(Set<String> interests) {
-                // call 
+                // call
                 subscriptionChangedListener.invoke(interests);
             }
         });
     }
 
     public void setOnMessageReceivedListenerForVisibleActivity(final Activity activity, final Callback pushNotificationReceivedListener) {
+        // TODO: Uncomment
+        // This only seems to exist on the singleton.
+        // https://github.com/pusher/push-notifications-android/issues/58
         PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity, new PushNotificationReceivedListener() {
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {
