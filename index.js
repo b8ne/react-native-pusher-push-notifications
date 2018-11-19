@@ -36,20 +36,23 @@ export default {
       console.log('Not implemented yet');
     }
   },
+  getSubscriptions: (onSuccess) => {
+    if (Platform.OS === 'ios') {
+        console.log('Not implemented yet');
+    } else {
+        RNPusherPushNotifications.getSubscriptions(onSuccess);
+    }
+  },
   unsubscribe: (channel, onError, onSuccess) => {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.unsubscribe(channel, onError);
     } else {
-      RNPusherPushNotifications.unsubscribe(
-        channel
-      );
+      RNPusherPushNotifications.unsubscribe(channel);
     }
   },
   on: (eventName, callback) => {
     if (Platform.OS === 'ios') {
-      rnPusherPushNotificationsEmitter.addListener(eventName, payload =>
-        callback(payload)
-      );
+      rnPusherPushNotificationsEmitter.addListener(eventName, payload => callback(payload));
     } else {
       DeviceEventEmitter.addListener(eventName, payload => callback(payload));
     }

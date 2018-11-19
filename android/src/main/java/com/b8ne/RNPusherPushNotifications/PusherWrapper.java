@@ -4,22 +4,13 @@ import android.util.Log;
 
 import android.app.Activity;
 
-import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONObject;
-import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.WritableNativeMap;
+import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.firebase.messaging.RemoteMessage;
-import com.facebook.react.bridge.ReactApplicationContext;
 
-import com.google.firebase.messaging.RemoteMessage;
 import com.pusher.pushnotifications.PushNotifications;
-import com.pusher.pushnotifications.PushNotificationsInstance;
 import com.pusher.pushnotifications.SubscriptionsChangedListener;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 
@@ -31,105 +22,77 @@ import com.pusher.pushnotifications.PushNotificationReceivedListener;
  */
 
 public class PusherWrapper {
-    //private static PushNotificationRegistration nativePusher;
+
     private String registeredEvent = "registered";
     private String notificationEvent = "notification";
-    //private final PushNotificationsInstance pushNotifications;
     private ReactContext context;
-//    public PusherWrapper(String appKey) {
-//        Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
-//        System.out.print("Creating Pusher with App Key: " + appKey);
-////        if (nativePusher == null) {
-////            PusherAndroid pusher = new PusherAndroid(appKey);
-////            nativePusher = pusher.nativePusher();
-////        }
-//    }
 
 
     public PusherWrapper(String appKey, final ReactContext context) {
         Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
         System.out.print("Creating Pusher with App Key: " + appKey);
 
-        // the new-ed version of PushNotificationsInstance doesn't seem to have
-        // an instance of setOnMessageReceivedListenerForVisibleActivity, so
-        // use the singleton version.
-        //this.pushNotifications = new PushNotificationsInstance(context, appKey);
-        PushNotifications.start(context, appKey);
-        this.context = context;
-        //if (nativePusher == null) {
-            //PusherAndroid pusher = new PusherAndroid(appKey);
-            //nativePusher = pusher.nativePusher();
-        //}
-
         try {
-            //PushNotifications.subscribe("hello");
-
-//            nativePusher.registerFCM(context, new PushNotificationRegistrationListener() {
-//                @Override
-//                public void onSuccessfulRegistration() {
-//                    Log.d("PUSHER_WRAPPER", "Successfully registered to FCM");
-//                    System.out.print("Successfully registered to FCM");
-//                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(registeredEvent, null);
-//                }
-//
-//                @Override
-//                public void onFailedRegistration(int statusCode, String response) {
-//                    Log.d("PUSHER_WRAPPER", "FCM Registration failed with code " + statusCode + " " + response);
-//                    System.out.print("FCM Registration failed with code " + statusCode + " " + response);
-//                }
-//            });
-//            nativePusher.setFCMListener(new FCMPushNotificationReceivedListener() {
-//                @Override
-//                public void onMessageReceived(RemoteMessage remoteMessage) {
-//                    WritableMap map = Arguments.createMap();
-//                    RemoteMessage.Notification notification = remoteMessage.getNotification();
-//
-//                    if(notification != null) {
-//                        map.putString("body", notification.getBody());
-//                        map.putString("title", notification.getTitle());
-//                        map.putString("tag", notification.getTag());
-//                        map.putString("click_action", notification.getClickAction());
-//                        map.putString("icon", notification.getIcon());
-//
-//                        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
-//                        System.out.print(remoteMessage.toString());
-//                    }
-//                    else {
-//                        Log.d("PUSHER_WRAPPER", "No notification received");
-//                    }
-//                }
-//            });
-
+            // the new-ed version of PushNotificationsInstance doesn't seem to have
+            // an instance of setOnMessageReceivedListenerForVisibleActivity, so
+            // use the singleton version.
+            // this.pushNotifications = new PushNotificationsInstance(context, appKey);
+            // Does .start actually throw an exception?
+            PushNotifications.start(context, appKey);
+            context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(registeredEvent, null);
+            this.context = context;
         } catch (Exception ex) {
             Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper " + ex.getMessage());
             System.out.print("Exception in PusherWrapper " + ex.getMessage());
         }
     }
 
-    public void onResume(Activity activity) {
+    public void onResume(final Activity activity) {
         // SEE: https://docs.pusher.com/beams/reference/android
-        // TODO: Uncomment
+        Log.i("PUSHER_WRAPPER", "onResume subscribing with activity " + getActivityName(activity));
+        System.out.print("onResume subscribing with activity " + getActivityName(activity));
+
         PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity, new PushNotificationReceivedListener() {
             @Override
             public void onMessageReceived(RemoteMessage remoteMessage) {
-                String messagePayload = remoteMessage.getData().get("inAppNotificationMessage");
-                if (messagePayload == null) {
-                    // Message payload was not set for this notification
-                    Log.i("MainActivity", "Payload was missing");
-                } else {
-                    Log.i("MainActivity", messagePayload);
-                    // Now update the UI based on your message payload!
-                    // TODO: create a WriteableMap as above?
-                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, messagePayload);
+                // Arguments.createMap seems to be for testing
+                // see: https://github.com/facebook/react-native/blob/master/ReactAndroid/src/main/java/com/facebook/react/bridge/WritableNativeMap.java#L16
+                //WritableMap map = Arguments.createMap();
+                final WritableMap map = new WritableNativeMap();
+                RemoteMessage.Notification notification = remoteMessage.getNotification();
+
+                if(notification != null) {
+                    map.putString("body", notification.getBody());
+                    map.putString("title", notification.getTitle());
+                    map.putString("tag", notification.getTag());
+                    map.putString("click_action", notification.getClickAction());
+                    map.putString("icon", notification.getIcon());
+                    map.putString("color", notification.getColor());
+                    //map.putString("link", notification.getLink());
+
+                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
+                    //System.out.print(remoteMessage.toString());
+                    Log.d("PUSHER_WRAPPER", "Notification received: " + notification.toString());
+                }
+                else {
+                    Log.d("PUSHER_WRAPPER", "No notification received");
                 }
             }
         });
 
     }
 
-//    public PushNotificationRegistration getNativePusher() {
-//        return this.nativePusher;
-//    }
+    public void onDestroy(Activity activity) {
+        Log.i("PUSHER_WRAPPER", "onDestroy: " +getActivityName(activity));
+    }
+
+    public void onPause(Activity activity) {
+        Log.i("PUSHER_WRAPPER", "onPause: " +getActivityName(activity));
+    }
+
+    private String getActivityName(Activity activity) {
+        return activity.getClass().getSimpleName();
+    }
 
     public void subscribe(final String interest) {
         Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  interest);
@@ -139,34 +102,17 @@ public class PusherWrapper {
             PushNotifications.subscribe(interest);
             Log.d("PUSHER_WRAPPER", "Success! " + interest);
             System.out.print("Success! " + interest);
-            //successCallback.invoke();
+            //successCallback.invoke(); // TODO: Should these be re-enabled?
         } catch (Exception ex) {
             Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper " + ex.getMessage());
             System.out.print("Exception in PusherWrapper.subscribe " + ex.getMessage());
-            // probably these should be removed
-            //errorCallback.invoke(0, ex.message);
+            //errorCallback.invoke(0, ex.message); // TODO: Should these be re-enabled?
         }
-//        nativePusher.subscribe(interest, new InterestSubscriptionChangeListener() {
-//            @Override
-//            public void onSubscriptionChangeSucceeded() {
-//                Log.d("PUSHER_WRAPPER", "Success! " + interest);
-//                System.out.print("Success! " + interest);
-//                successCallback.invoke();
-//            }
-//
-//            @Override
-//            public void onSubscriptionChangeFailed(int statusCode, String response) {
-//                Log.d("PUSHER_WRAPPER", ":(: received " + statusCode + " with" + response);
-//                System.out.print(":(: received " + statusCode + " with" + response);
-//                errorCallback.invoke(statusCode, response);
-//            }
-//        });
     }
 
     public void unsubscribe(final String interest) {
-        //this.pushNotifications.unsubscribe(interest);
         PushNotifications.unsubscribe(interest);
-
+        // TODO: maybe re-enable callbacks?  Are they necessary, or do the API calls even fail?
 //        nativePusher.unsubscribe(interest, new InterestSubscriptionChangeListener() {
 //            @Override
 //            public void onSubscriptionChangeSucceeded() {
@@ -191,7 +137,6 @@ public class PusherWrapper {
 
     public void getSubscriptions( final Callback subscriptionCallback) {
         Set<String> subscriptions = PushNotifications.getSubscriptions();
-        //Set<String> subscriptions = this.pushNotifications.getSubscriptions();
         subscriptionCallback.invoke(subscriptions);
     }
 
@@ -202,18 +147,6 @@ public class PusherWrapper {
             public void onSubscriptionsChanged(Set<String> interests) {
                 // call
                 subscriptionChangedListener.invoke(interests);
-            }
-        });
-    }
-
-    public void setOnMessageReceivedListenerForVisibleActivity(final Activity activity, final Callback pushNotificationReceivedListener) {
-        // TODO: Uncomment
-        // This only seems to exist on the singleton.
-        // https://github.com/pusher/push-notifications-android/issues/58
-        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity, new PushNotificationReceivedListener() {
-            @Override
-            public void onMessageReceived(RemoteMessage remoteMessage) {
-                pushNotificationReceivedListener.invoke(remoteMessage);
             }
         });
     }

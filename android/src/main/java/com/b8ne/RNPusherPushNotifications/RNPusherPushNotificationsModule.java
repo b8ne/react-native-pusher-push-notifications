@@ -30,10 +30,12 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
 
       @Override
       public void onHostDestroy() {
+          pusher.onDestroy(getCurrentActivity());
       }
 
       @Override
       public void onHostPause() {
+          pusher.onPause(getCurrentActivity());
       }
   };
 
@@ -117,17 +119,6 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
             @Override
             public void run() {
                 pusher.setOnSubscriptionsChangedListener(subscriptionChangedListener);
-            }
-        });
-    }
-
-    @ReactMethod
-    public void setOnMessageReceivedListenerForVisibleActivity(final Callback pushNotificationReceivedListener) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                // TODO: Figure out how to get the activity.
-                pusher.setOnMessageReceivedListenerForVisibleActivity(null, pushNotificationReceivedListener);
             }
         });
     }

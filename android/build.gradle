@@ -46,8 +46,6 @@ android {
 
 dependencies {
     compile 'com.facebook.react:react-native:0.20.+'
-    //compile 'com.pusher:pusher-websocket-android:0.5.0'
-    //compile 'com.google.firebase:firebase-messaging:9.8.0'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.1.0'
     implementation 'com.pusher:push-notifications-android:1.0.1'
