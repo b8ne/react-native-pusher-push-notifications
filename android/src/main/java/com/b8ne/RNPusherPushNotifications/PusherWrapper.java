@@ -137,8 +137,8 @@ public class PusherWrapper {
                 successCallback.invoke();
             }
         } catch (Exception ex) {
-            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.unsubscribe " + ex.getMessage());
-            System.out.print("Exception in PusherWrapper.unsubscribe " + ex.getMessage());
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.unsubscribeAll " + ex.getMessage());
+            System.out.print("Exception in PusherWrapper.unsubscribeAll " + ex.getMessage());
             // historically this is expecting a statusCode as first arg
             if (errorCallback != null) {
                 errorCallback.invoke(0, ex.getMessage());
@@ -168,8 +168,12 @@ public class PusherWrapper {
 
         PushNotifications.setOnSubscriptionsChangedListener(new SubscriptionsChangedListener() {
             @Override
-            public void onSubscriptionsChanged(Set<String> interests) {
+            public void onSubscriptionsChanged(Set<String> interestSet) {
                 // call
+                WritableArray interests = new WritableNativeArray();
+                for (String interest : interestSet) {
+                    interests.pushString(interest);
+                }
                 subscriptionChangedListener.invoke(interests);
             }
         });

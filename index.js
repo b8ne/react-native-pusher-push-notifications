@@ -50,6 +50,13 @@ export default {
       RNPusherPushNotifications.unsubscribe(channel, onError, onSuccess);
     }
   },
+  setOnSubscriptionsChangedListener: (onChange) => {
+    if (Platform.OS === 'ios') {
+      console.log('Not implemented yet');
+    } else {
+      RNPusherPushNotifications.setOnSubscriptionsChangedListener(onChange);
+    }
+  },
   on: (eventName, callback) => {
     if (Platform.OS === 'ios') {
       rnPusherPushNotificationsEmitter.addListener(eventName, payload => callback(payload));
