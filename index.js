@@ -26,7 +26,7 @@ export default {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.subscribe(channel, onError);
     } else {
-      RNPusherPushNotifications.subscribe(channel);
+      RNPusherPushNotifications.subscribe(channel, onError, onSuccess);
     }
   },
   setSubscriptions: (interests, onError) => {
@@ -36,18 +36,18 @@ export default {
       console.log('Not implemented yet');
     }
   },
-  getSubscriptions: (onSuccess) => {
+  getSubscriptions: (onSuccess, onError) => {
     if (Platform.OS === 'ios') {
         console.log('Not implemented yet');
     } else {
-        RNPusherPushNotifications.getSubscriptions(onSuccess);
+        RNPusherPushNotifications.getSubscriptions(onSuccess, onError);
     }
   },
   unsubscribe: (channel, onError, onSuccess) => {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.unsubscribe(channel, onError);
     } else {
-      RNPusherPushNotifications.unsubscribe(channel);
+      RNPusherPushNotifications.unsubscribe(channel, onError, onSuccess);
     }
   },
   on: (eventName, callback) => {

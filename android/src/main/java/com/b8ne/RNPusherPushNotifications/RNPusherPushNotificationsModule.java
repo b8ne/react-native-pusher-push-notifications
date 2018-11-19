@@ -53,62 +53,42 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
         reactContext.addLifecycleEventListener(lifecycleEventListener);
   }
 
-//    @ReactMethod
-//    public void subscribe(final String channel, final Callback errorCallback, final Callback successCallback) {
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                pusher.subscribe(channel, errorCallback, successCallback);
-//            }
-//        });
-//    }
-//
-//    @ReactMethod
-//    public void unsubscribe(final String channel, final Callback errorCallback, final Callback successCallback) {
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                pusher.unsubscribe(channel, errorCallback, successCallback);
-//            }
-//        });
-//    }
-
     @ReactMethod
-    public void subscribe(final String interest) {
+    public void subscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.subscribe(interest);
+                pusher.subscribe(interest, errorCallback, successCallback);
             }
         });
     }
 
     @ReactMethod
-    public void unsubscribe(final String interest) {
+    public void unsubscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.unsubscribe(interest);
+                pusher.unsubscribe(interest, errorCallback, successCallback);
             }
         });
     }
 
     @ReactMethod
-    public void unsubscribeAll() {
+    public void unsubscribeAll(final Callback errorCallback, final Callback successCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.unsubscribeAll();
+                pusher.unsubscribeAll(errorCallback, successCallback);
             }
         });
     }
 
     @ReactMethod
-    public void getSubscriptions( final Callback subscriptionCallback) {
+    public void getSubscriptions( final Callback subscriptionCallback, final Callback errorCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.getSubscriptions(subscriptionCallback);
+                pusher.getSubscriptions(subscriptionCallback, errorCallback);
             }
         });
     }

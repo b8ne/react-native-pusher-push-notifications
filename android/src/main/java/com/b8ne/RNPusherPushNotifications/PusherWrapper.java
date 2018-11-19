@@ -94,50 +94,74 @@ public class PusherWrapper {
         return activity.getClass().getSimpleName();
     }
 
-    public void subscribe(final String interest) {
-        Log.d("PUSHER_WRAPPER", "Attempting to subscribe to " +  interest);
-        System.out.print("Attempting to subscribe to " +  interest);
+    public void subscribe(final String interest, final Callback errorCallback,  final Callback successCallback) {
+        Log.d("PUSHER_WRAPPER", "Subscribing to " +  interest);
+        System.out.print("Subscribing to " +  interest);
         try {
             //this.pushNotifications.subscribe(interest);
             PushNotifications.subscribe(interest);
             Log.d("PUSHER_WRAPPER", "Success! " + interest);
             System.out.print("Success! " + interest);
-            //successCallback.invoke(); // TODO: Should these be re-enabled?
+            successCallback.invoke();
         } catch (Exception ex) {
             Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper " + ex.getMessage());
             System.out.print("Exception in PusherWrapper.subscribe " + ex.getMessage());
-            //errorCallback.invoke(0, ex.message); // TODO: Should these be re-enabled?
+            // historically this is expecting a statusCode as first arg
+            errorCallback.invoke(0, ex.getMessage());
         }
     }
 
-    public void unsubscribe(final String interest) {
-        PushNotifications.unsubscribe(interest);
-        // TODO: maybe re-enable callbacks?  Are they necessary, or do the API calls even fail?
-//        nativePusher.unsubscribe(interest, new InterestSubscriptionChangeListener() {
-//            @Override
-//            public void onSubscriptionChangeSucceeded() {
-//              Log.d("PUSHER_WRAPPER", "Success! " + interest);
-//              System.out.print("Success! " + interest);
-//              successCallback.invoke();
-//            }
-//
-//            @Override
-//            public void onSubscriptionChangeFailed(int statusCode, String response) {
-//                Log.d("PUSHER_WRAPPER", ":(: received " + statusCode + " with" + response);
-//                System.out.print(":(: received " + statusCode + " with" + response);
-//                errorCallback.invoke(statusCode, response);
-//            }
-//        });
+    public void unsubscribe(final String interest, final Callback errorCallback,  final Callback successCallback) {
+        Log.d("PUSHER_WRAPPER", "Unsubscribing from " + interest);
+        System.out.print("Unsubscribing from " + interest);
+        try {
+            PushNotifications.unsubscribe(interest);
+            if (successCallback != null) {
+                successCallback.invoke();
+            }
+        } catch (Exception ex) {
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.unsubscribe " + ex.getMessage());
+            System.out.print("Exception in PusherWrapper.unsubscribe " + ex.getMessage());
+            // historically this is expecting a statusCode as first arg
+            if (errorCallback != null) {
+                errorCallback.invoke(0, ex.getMessage());
+            }
+        }
     }
 
-    public void unsubscribeAll() {
-        PushNotifications.unsubscribeAll();
-        //this.pushNotifications.unsubscribeAll();
+    public void unsubscribeAll(final Callback errorCallback,  final Callback successCallback) {
+
+        try {
+            PushNotifications.unsubscribeAll();
+            if (successCallback != null) {
+                successCallback.invoke();
+            }
+        } catch (Exception ex) {
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.unsubscribe " + ex.getMessage());
+            System.out.print("Exception in PusherWrapper.unsubscribe " + ex.getMessage());
+            // historically this is expecting a statusCode as first arg
+            if (errorCallback != null) {
+                errorCallback.invoke(0, ex.getMessage());
+            }
+        }
     }
 
-    public void getSubscriptions( final Callback subscriptionCallback) {
-        Set<String> subscriptions = PushNotifications.getSubscriptions();
-        subscriptionCallback.invoke(subscriptions);
+    public void getSubscriptions( final Callback subscriptionCallback, final Callback errorCallback) {
+        try {
+            Set<String> subscriptionSet = PushNotifications.getSubscriptions();
+            WritableArray subscriptions = new WritableNativeArray();
+            for (String subscription : subscriptionSet) {
+                subscriptions.pushString(subscription);
+            }
+            subscriptionCallback.invoke(subscriptions);
+        } catch (Exception ex) {
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.getSubscriptions " + ex.getMessage());
+            System.out.print("Exception in PusherWrapper.getSubscriptions " + ex.getMessage());
+            // historically this is expecting a statusCode as first arg
+            if (errorCallback != null) {
+                errorCallback.invoke(0, ex.getMessage());
+            }
+        }
     }
 
     public void setOnSubscriptionsChangedListener(final Callback subscriptionChangedListener) {
