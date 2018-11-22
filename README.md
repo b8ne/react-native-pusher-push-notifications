@@ -31,6 +31,7 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 1.  In Xcode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
 2.  Go to `node_modules` ➜ `react-native-pusher-push-notifications` and add `RNPusherPushNotifications.xcodeproj`
 3.  In Xcode, in the project navigator, select your project. Add `libRNPusherPushNotifications.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+4.  In Xcode, under Build Settings > Header Search Paths, add `$(SRCROOT)/../node_modules/react-native-pusher-push-notifications/ios` (recursive)
 
 ** DO NOT follow the pusher.com push notification docs that detail modifying the AppDelegate.h/m files! - this package takes care of most of the steps for you**
 
