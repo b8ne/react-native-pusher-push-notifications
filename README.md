@@ -57,7 +57,96 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 
 #### Android
 
-COMING SOON
+1. Add the temporary URL to `package.json`:
+
+```json
+"dependencies": {
+    "react-native-pusher-push-notifications": "git+http://git@github.com/ZeptInc/react-native-pusher-push-notifications#2.1.0"
+}
+```
+
+2. Update `android/app/src/main/AndroidManifest.xml` with:
+
+```xml
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="ca.zept.permission.C2D_MESSAGE" />
+<uses-permission android:name="android.permission.VIBRATE" />
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+```
+
+3. Add this to `android/app/build.gradle`:
+
+```gradle
+dependencies {
+   implementation 'com.pusher:push-notifications-android:1.0.1'
+}
+```
+
+4. Set up `android/app/google-services.json`
+
+5. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
+
+```java
+import com.b8ne.RNPusherPushNotifications.RNPusherPushNotificationsPackage;
+// ...
+
+protected List<ReactPackage> getPackages() {
+  return Arrays.<ReactPackage>asList(	  
+    new MainReactPackage(),
+    new RNPusherPushNotificationsPackage(), // <--- add this
+    // ...
+}
+```
+
+6. Add to `android/settings.gradle` (below rootProject.name)
+
+```gradle
+include ':react-native-pusher-push-notifications'
+project(':react-native-pusher-push-notifications').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pusher-push-notifications/android')
+```
+
+Then from typescript:
+
+```typescript
+import {Platform} from "react-native";
+import {PUSHER_BEAMS_INSTANCE_ID} from "react-native-dotenv";
+import RNPusherPushNotifications from "react-native-pusher-push-notifications";
+
+const init= (): void => {
+    RNPusherPushNotifications.setInstanceId(PUSHER_BEAMS_INSTANCE_ID);
+
+    RNPusherPushNotifications.on("notification", handleNotification);
+    RNPusherPushNotifications.setOnSubscriptionsChangedListener(onSubscriptionsChanged);
+};
+
+const subscribe = (interest: string): void => {
+    console.log(`Subscribing to "${interest}"`);
+    RNPusherPushNotifications.subscribe(
+        interest,
+        (statusCode, response) => {
+            console.error(statusCode, response);
+        },
+        () => {
+            console.log(`CALLBACK: Subscribed to ${interest}`);
+        }
+    );
+};
+
+const handleNotification = (notification: any): void => {
+    console.log(notification);
+    if (Platform.OS === "ios") {
+        console.log("CALLBACK: handleNotification (ios)");
+    } else {
+        console.log("CALLBACK: handleNotification (android)");
+        console.log(notification);
+    }
+};
+
+const onSubscriptionsChanged = (interests: string[]): void => {
+    console.log("CALLBACK: onSubscriptionsChanged");
+    console.log(interests);
+}
+```
 
 ## Usage
 
@@ -99,6 +188,8 @@ const handleNotification = notification => {
       // App is foreground and notification is received. Show a alert or something.
       default:
         break;
+    } else {
+        // console.log("android handled notification...");
     }
   }
 };
