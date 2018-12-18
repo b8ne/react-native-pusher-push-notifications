@@ -78,6 +78,8 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 
 ```gradle
 dependencies {
+   compile project(':react-native-pusher-push-notifications')
+   // ...
    implementation 'com.pusher:push-notifications-android:1.0.1'
 }
 ```
