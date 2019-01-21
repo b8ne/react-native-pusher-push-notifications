@@ -57,6 +57,9 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 
 #### Android
 
+Refer to https://github.com/ZeptInc/react-native-pusher-push-notifications for up-to-date Pusher Beams installation 
+instructions (summarized below):
+
 1. Add the temporary URL to `package.json`:
 
 ```json
@@ -74,7 +77,21 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 ```
 
-3. Add this to `android/app/build.gradle`:
+3. Update `android/build.gradle`
+
+```gradle
+buildscript {
+    // ...
+    dependencies {
+        // ...
+        // Add this line
+        classpath 'com.google.gms:google-services:4.0.1'
+    }
+}    
+```
+
+
+4. Add this to `android/app/build.gradle`:
 
 ```gradle
 dependencies {
@@ -84,9 +101,9 @@ dependencies {
 }
 ```
 
-4. Set up `android/app/google-services.json`
+5. Set up `android/app/google-services.json`
 
-5. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
+6. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
 
 ```java
 import com.b8ne.RNPusherPushNotifications.RNPusherPushNotificationsPackage;
@@ -100,7 +117,7 @@ protected List<ReactPackage> getPackages() {
 }
 ```
 
-6. Add to `android/settings.gradle` (below rootProject.name)
+7. Add to `android/settings.gradle` (below rootProject.name)
 
 ```gradle
 include ':react-native-pusher-push-notifications'
