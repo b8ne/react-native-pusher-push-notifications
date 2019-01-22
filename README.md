@@ -57,7 +57,7 @@ React native link has shown to incorrectly setup projects, so follow the manual 
 
 #### Android
 
-Refer to https://github.com/ZeptInc/react-native-pusher-push-notifications for up-to-date Pusher Beams installation 
+Refer to https://docs.pusher.com/beams/reference/android for up-to-date Pusher Beams installation 
 instructions (summarized below):
 
 1. Add the temporary URL to `package.json`:
@@ -71,10 +71,16 @@ instructions (summarized below):
 2. Update `android/app/src/main/AndroidManifest.xml` with:
 
 ```xml
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="ca.zept.permission.C2D_MESSAGE" />
-<uses-permission android:name="android.permission.VIBRATE" />
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+<manifest>
+  <application>
+        ...
+    <service android:name=".NotificationsMessagingService">
+       <intent-filter android:priority="1">
+         <action android:name="com.google.firebase.MESSAGING_EVENT" />
+       </intent-filter>
+    </service>
+  </application>
+</manifest>
 ```
 
 3. Update `android/build.gradle`
