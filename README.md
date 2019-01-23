@@ -68,22 +68,7 @@ instructions (summarized below):
 }
 ```
 
-2. Update `android/app/src/main/AndroidManifest.xml` with:
-
-```xml
-<manifest>
-  <application>
-        ...
-    <service android:name=".NotificationsMessagingService">
-       <intent-filter android:priority="1">
-         <action android:name="com.google.firebase.MESSAGING_EVENT" />
-       </intent-filter>
-    </service>
-  </application>
-</manifest>
-```
-
-3. Update `android/build.gradle`
+2. Update `android/build.gradle`
 
 ```gradle
 buildscript {
@@ -96,20 +81,19 @@ buildscript {
 }    
 ```
 
-
-4. Add this to `android/app/build.gradle`:
+3. Add this to `android/app/build.gradle`:
 
 ```gradle
 dependencies {
    compile project(':react-native-pusher-push-notifications')
    // ...
-   implementation 'com.pusher:push-notifications-android:1.0.1'
+   implementation 'com.pusher:push-notifications-android:1.0.2'
 }
 ```
 
-5. Set up `android/app/google-services.json`
+4. Set up `android/app/google-services.json`
 
-6. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
+5. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
 
 ```java
 import com.b8ne.RNPusherPushNotifications.RNPusherPushNotificationsPackage;
