@@ -4,7 +4,11 @@ Manage pusher interest subscriptions from within React Native JS
 
 **IMPORTANT!!!**
 
-This module is intended to complement the setup with [Carthage](https://docs.pusher.com/beams/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
+This module is intended to complement the setup with [Carthage](https://pusher.com/docs/beams/getting-started/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
+
+```Cartfile
+github "pusher/push-notifications-swift" ~> 2.0.0
+```
 
 More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
 
