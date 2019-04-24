@@ -87,11 +87,19 @@ buildscript {
 dependencies {
    compile project(':react-native-pusher-push-notifications')
    // ...
-   implementation 'com.pusher:push-notifications-android:1.0.2'
+   implementation 'com.google.firebase:firebase-core:16.0.1'
+   implementation 'com.pusher:push-notifications-android:1.4.0'
 }
+
+// in the bottom of the file
+apply plugin: 'com.google.gms.google-services'
 ```
 
 4. Set up `android/app/google-services.json`
+
+This file is generated via [Google Firebase](https://console.firebase.google.com) console when creating a new app. Setup your app there and download the file.
+
+Pusher Beams requires a FCM secret, this is also found under Cloud Messaging in Google Firebase.
 
 5. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
 
