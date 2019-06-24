@@ -27,7 +27,6 @@ public class PusherWrapper {
     private String notificationEvent = "notification";
     private ReactContext context;
 
-
     public PusherWrapper(String appKey, final ReactContext context) {
         Log.d("PUSHER_WRAPPER", "Creating Pusher with App Key: " + appKey);
         System.out.print("Creating Pusher with App Key: " + appKey);
@@ -52,53 +51,55 @@ public class PusherWrapper {
         Log.i("PUSHER_WRAPPER", "onResume subscribing with activity " + getActivityName(activity));
         System.out.print("onResume subscribing with activity " + getActivityName(activity));
 
-        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity, new PushNotificationReceivedListener() {
-            @Override
-            public void onMessageReceived(RemoteMessage remoteMessage) {
-                // Arguments.createMap seems to be for testing
-                // see: https://github.com/facebook/react-native/blob/master/ReactAndroid/src/main/java/com/facebook/react/bridge/WritableNativeMap.java#L16
-                //WritableMap map = Arguments.createMap();
-                final WritableMap map = new WritableNativeMap();
-                RemoteMessage.Notification notification = remoteMessage.getNotification();
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity,
+                new PushNotificationReceivedListener() {
+                    @Override
+                    public void onMessageReceived(RemoteMessage remoteMessage) {
+                        // Arguments.createMap seems to be for testing
+                        // see:
+                        // https://github.com/facebook/react-native/blob/master/ReactAndroid/src/main/java/com/facebook/react/bridge/WritableNativeMap.java#L16
+                        // WritableMap map = Arguments.createMap();
+                        final WritableMap map = new WritableNativeMap();
+                        RemoteMessage.Notification notification = remoteMessage.getNotification();
 
-                if(notification != null) {
-                    map.putString("body", notification.getBody());
-                    map.putString("title", notification.getTitle());
-                    map.putString("tag", notification.getTag());
-                    map.putString("click_action", notification.getClickAction());
-                    map.putString("icon", notification.getIcon());
-                    map.putString("color", notification.getColor());
-                    //map.putString("link", notification.getLink());
+                        if (notification != null) {
+                            map.putString("body", notification.getBody());
+                            map.putString("title", notification.getTitle());
+                            map.putString("tag", notification.getTag());
+                            map.putString("click_action", notification.getClickAction());
+                            map.putString("icon", notification.getIcon());
+                            map.putString("color", notification.getColor());
+                            // map.putString("link", notification.getLink());
 
-                    context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
-                    //System.out.print(remoteMessage.toString());
-                    Log.d("PUSHER_WRAPPER", "Notification received: " + notification.toString());
-                }
-                else {
-                    Log.d("PUSHER_WRAPPER", "No notification received");
-                }
-            }
-        });
+                            context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                                    .emit(notificationEvent, map);
+                            // System.out.print(remoteMessage.toString());
+                            Log.d("PUSHER_WRAPPER", "Notification received: " + notification.toString());
+                        } else {
+                            Log.d("PUSHER_WRAPPER", "No notification received");
+                        }
+                    }
+                });
 
     }
 
     public void onDestroy(Activity activity) {
-        Log.i("PUSHER_WRAPPER", "onDestroy: " +getActivityName(activity));
+        Log.i("PUSHER_WRAPPER", "onDestroy: " + getActivityName(activity));
     }
 
     public void onPause(Activity activity) {
-        Log.i("PUSHER_WRAPPER", "onPause: " +getActivityName(activity));
+        Log.i("PUSHER_WRAPPER", "onPause: " + getActivityName(activity));
     }
 
     private String getActivityName(Activity activity) {
         return activity.getClass().getSimpleName();
     }
 
-    public void subscribe(final String interest, final Callback errorCallback,  final Callback successCallback) {
-        Log.d("PUSHER_WRAPPER", "Subscribing to " +  interest);
-        System.out.print("Subscribing to " +  interest);
+    public void subscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
+        Log.d("PUSHER_WRAPPER", "Subscribing to " + interest);
+        System.out.print("Subscribing to " + interest);
         try {
-            //this.pushNotifications.subscribe(interest);
+            // this.pushNotifications.subscribe(interest);
             PushNotifications.subscribe(interest);
             Log.d("PUSHER_WRAPPER", "Success! " + interest);
             System.out.print("Success! " + interest);
@@ -111,7 +112,7 @@ public class PusherWrapper {
         }
     }
 
-    public void unsubscribe(final String interest, final Callback errorCallback,  final Callback successCallback) {
+    public void unsubscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
         Log.d("PUSHER_WRAPPER", "Unsubscribing from " + interest);
         System.out.print("Unsubscribing from " + interest);
         try {
@@ -129,7 +130,7 @@ public class PusherWrapper {
         }
     }
 
-    public void unsubscribeAll(final Callback errorCallback,  final Callback successCallback) {
+    public void unsubscribeAll(final Callback errorCallback, final Callback successCallback) {
 
         try {
             PushNotifications.unsubscribeAll();
@@ -146,7 +147,7 @@ public class PusherWrapper {
         }
     }
 
-    public void getSubscriptions( final Callback subscriptionCallback, final Callback errorCallback) {
+    public void getSubscriptions(final Callback subscriptionCallback, final Callback errorCallback) {
         try {
             Set<String> subscriptionSet = PushNotifications.getSubscriptions();
             WritableArray subscriptions = new WritableNativeArray();
@@ -164,6 +165,27 @@ public class PusherWrapper {
         }
     }
 
+    public void setUserId(final String userId, final String token, final Callback errorCallback,
+            final Callback successCallback) {
+        Log.d("PUSHER_WRAPPER", "Setting userId to " + userId);
+        System.out.print("Setting userId to " + userId);
+        try {
+            LocalTokenProvider instance = new LocalTokenProvider(token);
+
+            PushNotifications.setUserId(userId, instance);
+
+            Log.d("PUSHER_WRAPPER", "Success! " + userId);
+            System.out.print("Success! " + userId);
+            successCallback.invoke();
+        } catch (Exception ex) {
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper " + ex.getMessage());
+            System.out.print("Exception in PusherWrapper.setUserId " + ex.getMessage());
+            // historically this is expecting a statusCode as first arg
+            errorCallback.invoke(0, ex.getMessage());
+        }
+
+    }
+
     public void setOnSubscriptionsChangedListener(final Callback subscriptionChangedListener) {
 
         PushNotifications.setOnSubscriptionsChangedListener(new SubscriptionsChangedListener() {
@@ -178,7 +200,4 @@ public class PusherWrapper {
             }
         });
     }
-
-
-
 }
