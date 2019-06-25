@@ -1,4 +1,5 @@
 #import "RNPusherEventHelper.h"
+#import "RNPusherLocalTokenProvider.h"
 #import "RNPusherPushNotifications.h"
 #import "UIKit/UIKit.h"
 #import <UIKit/UIKit.h>
@@ -44,6 +45,15 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
     NSError *anyError;
     [[PushNotifications shared] removeDeviceInterestWithInterest:interest error:&anyError];
   });
+}
+
+RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token callback:(RCTResponseSenderBlock)callback) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RNPusherLocalTokenProvider *tokenProvider = [[RNPusherLocalTokenProvider alloc] initWithToken:token];
+        [[PushNotifications shared] setUserId:userId tokenProvider:tokenProvider completion:^(NSError *error) {
+            callback(@[error]);
+        }];
+    });
 }
 
 - (void)handleNotification:(NSDictionary *)userInfo
