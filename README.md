@@ -4,7 +4,11 @@ Manage pusher interest subscriptions from within React Native JS
 
 **IMPORTANT!!!**
 
-This module is intended to complement the setup with [Carthage](https://docs.pusher.com/beams/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
+This module is intended to complement the setup with [Carthage](https://pusher.com/docs/beams/getting-started/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
+
+```Cartfile
+github "pusher/push-notifications-swift" ~> 2.0.0
+```
 
 More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
 
@@ -256,6 +260,22 @@ const setSubscriptions = donutInterests => {
     }
   );
 };
+```
+
+## Increment Badge number
+
+The APS data sent to Pusher Beams and then to Apple have an option `badge`. This will update your apps badge counter to the current number. If you send 1, the badge will show 1. This means you need to handle notification read status in your backend and when pushing update to the current number.
+
+By adding `incrementBadge` you can increment the badge number without having to deal with your backend.
+
+```
+{
+  aps: {
+    data: {
+      incrementBadge: true
+    }
+  }
+}
 ```
 
 ## Troubleshooting

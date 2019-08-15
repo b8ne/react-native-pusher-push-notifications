@@ -28,42 +28,21 @@ RCT_EXPORT_METHOD(subscribe:(NSString *)interest callback:(RCTResponseSenderBloc
   RCTLogInfo(@"Subscribing to interest: %@", interest);
   dispatch_async(dispatch_get_main_queue(), ^{
     NSError *anyError;
-    [[PushNotifications shared] subscribeWithInterest:interest error:&anyError completion:^{
-      if (anyError) {
-        callback(@[anyError, [NSNull null]]);
-      }
-      else {
-        RCTLogInfo(@"Subscribed to interest: %@", interest);
-      }
-    }];
+    [[PushNotifications shared] addDeviceInterestWithInterest:interest error:&anyError];
   });
 }
 
 RCT_EXPORT_METHOD(setSubscriptions:(NSArray *)interests callback:(RCTResponseSenderBlock)callback) {
   dispatch_async(dispatch_get_main_queue(), ^{
     NSError *anyError;
-    [[PushNotifications shared] setSubscriptionsWithInterests:interests error:&anyError completion:^{
-      if (anyError) {
-        callback(@[anyError, [NSNull null]]);
-      }
-      else {
-        RCTLogInfo(@"Subscribed to interests: %@", interests);
-      }
-    }];
+    [[PushNotifications shared] setDeviceInterestsWithInterests:interests error:&anyError];
   });
 }
 
 RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBlock)callback) {
   dispatch_async(dispatch_get_main_queue(), ^{
     NSError *anyError;
-    [[PushNotifications shared] unsubscribeWithInterest:interest error:&anyError completion:^{
-      if (anyError) {
-        callback(@[anyError, [NSNull null]]);
-      }
-      else {
-        RCTLogInfo(@"Unsubscribed from interest: %@", interest);
-      }
-    }];
+    [[PushNotifications shared] removeDeviceInterestWithInterest:interest error:&anyError];
   });
 }
 
@@ -89,6 +68,12 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
         appState = @"inactive";
     }
 
+    if((bool)[userInfo valueForKeyPath:@"aps.data.incrementBadge"]) {
+        NSInteger badgeCount = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        [UIApplication sharedApplication].applicationIconBadgeNumber = (badgeCount+1);
+        RCTLogInfo(@"increment badge number too: %ld", (long)( badgeCount+1 ));
+    }
+
     [RNPusherEventHelper emitEventWithName:@"notification" andPayload:@{
       @"userInfo":userInfo,
       @"appState":appState
@@ -100,10 +85,9 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
 - (void)setDeviceToken:(NSData *)deviceToken
 {
     RCTLogInfo(@"setDeviceToken: %@", deviceToken);
-    [[PushNotifications shared] registerDeviceToken:deviceToken completion:^{
-        [RNPusherEventHelper emitEventWithName:@"registered" andPayload:@{}];
-        RCTLogInfo(@"REGISTERED!");
-    }];
+    [[PushNotifications shared] registerDeviceToken:deviceToken];
+    [RNPusherEventHelper emitEventWithName:@"registered" andPayload:@{}];
+    RCTLogInfo(@"REGISTERED!");
 }
 
 @end
