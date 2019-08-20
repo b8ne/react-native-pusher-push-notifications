@@ -6,12 +6,12 @@ Pod::Spec.new do |s|
   s.version       = package['version']
   s.summary       = package['description']
 
-  s.author        = 'b8ne'
-  s.homepage      = 'https://github.com/b8ne/react-native-pusher-push-notifications'
+  s.author        = package['author']
+  s.homepage      = package['homepage']
   s.license       = package['license']
   s.platform      = :ios, '10.0'
 
-  s.source        = { :git => 'https://github.com/b8ne/react-native-pusher-push-notifications.git', :tag => s.version.to_s }
+  s.source        = { :git => package['repository']['url'], :tag => s.version.to_s }
   s.source_files  = '**/*.{h,m}'
 
   s.dependency      'React'
