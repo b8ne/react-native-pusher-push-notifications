@@ -14,6 +14,8 @@ import com.pusher.pushnotifications.PushNotifications;
 import com.pusher.pushnotifications.SubscriptionsChangedListener;
 import com.pusher.pushnotifications.PushNotificationReceivedListener;
 
+import java.util.Map.Entry;
+
 //
 // TODO: verify the android manifest after https://docs.pusher.com/beams/reference/android
 /**
@@ -57,9 +59,14 @@ public class PusherWrapper {
             public void onMessageReceived(RemoteMessage remoteMessage) {
                 // Arguments.createMap seems to be for testing
                 // see: https://github.com/facebook/react-native/blob/master/ReactAndroid/src/main/java/com/facebook/react/bridge/WritableNativeMap.java#L16
-                //WritableMap map = Arguments.createMap();
+                // WritableMap map = Arguments.createMap();
                 final WritableMap map = new WritableNativeMap();
                 RemoteMessage.Notification notification = remoteMessage.getNotification();
+
+                final WritableMap data = new WritableNativeMap();
+                for (Entry<String, String> entry : remoteMessage.getData().entrySet()) {
+                    data.putString(entry.getKey(), entry.getValue());
+                }
 
                 if(notification != null) {
                     map.putString("body", notification.getBody());
@@ -68,7 +75,8 @@ public class PusherWrapper {
                     map.putString("click_action", notification.getClickAction());
                     map.putString("icon", notification.getIcon());
                     map.putString("color", notification.getColor());
-                    //map.putString("link", notification.getLink());
+                    map.putMap("data", data);
+                    // map.putString("link", notification.getLink());
 
                     context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(notificationEvent, map);
                     //System.out.print(remoteMessage.toString());

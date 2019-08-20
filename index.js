@@ -61,7 +61,23 @@ export default {
     if (Platform.OS === 'ios') {
       rnPusherPushNotificationsEmitter.addListener(eventName, payload => callback(payload));
     } else {
-      DeviceEventEmitter.addListener(eventName, payload => callback(payload));
+      DeviceEventEmitter.addListener(eventName, payload => {
+        if (eventName === "notification") {
+          for (var key in payload.data) {
+            if (payload.data.hasOwnProperty(key)) {
+              try {
+                payload.data[key] = JSON.parse(payload.data[key]);
+              } catch (err) {
+                console.log(
+                  "could not convert data in " + key + " to json",
+                  err
+                );
+              }
+            }
+          }
+        }
+        callback(payload);
+      });
     }
-  },
+  }
 };
