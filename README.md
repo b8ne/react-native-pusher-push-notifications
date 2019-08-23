@@ -2,17 +2,7 @@
 
 Manage pusher interest subscriptions from within React Native JS
 
-**IMPORTANT!!!**
-
-This module is intended to complement the setup with [Carthage](https://pusher.com/docs/beams/getting-started/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
-
-```Cartfile
-github "pusher/push-notifications-swift" ~> 2.0.0
-```
-
 More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
-
-There are some issues installing this repo you need to be aware of. More info can be found in [issue 65](https://github.com/pusher/push-notifications-swift/issues/65).
 
 [![npm version](https://badge.fury.io/js/react-native-pusher-push-notifications.svg)](https://badge.fury.io/js/react-native-pusher-push-notifications)
 
@@ -26,23 +16,37 @@ or yarn
 
 ### Automatic installation
 
-React native link has shown to incorrectly setup projects, so follow the manual instructions below.
+React native link will install cocoapods required for this to work automatically.
 
-### Manual installation
+### Manual steps required
+
+#### React Native >0.60.x
+
+1. Add react-native.config.js to root of react-native directory
+```
+module.exports = {
+    dependencies: {
+        "react-native-pusher-push-notifications": {
+            platforms: {
+                android: null // this skips autolink for android
+            }
+        }
+    }
+};
+
+```
 
 #### iOS
 
-1.  In Xcode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2.  Go to `node_modules` ➜ `react-native-pusher-push-notifications` and add `RNPusherPushNotifications.xcodeproj`
-3.  In Xcode, in the project navigator, select your project. Add `libRNPusherPushNotifications.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
 
 ** DO NOT follow the pusher.com push notification docs that detail modifying the AppDelegate.h/m files! - this package takes care of most of the steps for you**
 
+1. Open ios/PodFile and update `platform :ios, '9.0'` to `platform :ios, '10.0'`
 1.  Open `AppDelegate.m` and add:
 
 ```aidl
     // Add this at the top of AppDelegate.m
-    #import "RNPusherPushNotifications.h"
+    #import <RNPusherPushNotifications.h>
 
     // Add the following as a new methods to AppDelegate.m
     - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -59,20 +63,21 @@ React native link has shown to incorrectly setup projects, so follow the manual 
     }
 ```
 
+##### Possible Issues
+
+- `linker command failed with exit code 1 (use -v to see invocation)`
+    1. Open ios/YourAppName.xcodeproj in XCode
+    2. Right click on Your App Name in the Project Navigator on the left, and click "New File…"
+    3. Create a single empty Swift file to the project (make sure that Your App Name target is selected when adding)
+    4. when Xcode asks, press Create Bridging Header and do not remove Swift file then. re-run your build.
+
+
 #### Android
 
 Refer to https://docs.pusher.com/beams/reference/android for up-to-date Pusher Beams installation 
 instructions (summarized below):
 
-1. Add the temporary URL to `package.json`:
-
-```json
-"dependencies": {
-    "react-native-pusher-push-notifications": "git+http://git@github.com/ZeptInc/react-native-pusher-push-notifications#2.1.0"
-}
-```
-
-2. Update `android/build.gradle`
+1. Update `android/build.gradle`
 
 ```gradle
 buildscript {
@@ -85,48 +90,34 @@ buildscript {
 }    
 ```
 
-3. Add this to `android/app/build.gradle`:
+2. Add this to `android/app/build.gradle`:
 
 ```gradle
-dependencies {
-   compile project(':react-native-pusher-push-notifications')
-   // ...
-   implementation 'com.google.firebase:firebase-core:16.0.1'
-   implementation 'com.pusher:push-notifications-android:1.4.0'
+
+// add to plugins
+plugins {
+    ...
+    id('com.google.gms.google-services')
 }
 
-// in the bottom of the file
-apply plugin: 'com.google.gms.google-services'
+dependencies {
+    ...
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.pusher:push-notifications-android:1.4.4'
+}
+
 ```
 
-4. Set up `android/app/google-services.json`
+3. Set up `android/app/google-services.json`
 
 This file is generated via [Google Firebase](https://console.firebase.google.com) console when creating a new app. Setup your app there and download the file.
 
 Pusher Beams requires a FCM secret, this is also found under Cloud Messaging in Google Firebase.
 
-5. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
 
-```java
-import com.b8ne.RNPusherPushNotifications.RNPusherPushNotificationsPackage;
-// ...
+## Implementation
 
-protected List<ReactPackage> getPackages() {
-  return Arrays.<ReactPackage>asList(	  
-    new MainReactPackage(),
-    new RNPusherPushNotificationsPackage(), // <--- add this
-    // ...
-}
-```
-
-7. Add to `android/settings.gradle` (below rootProject.name)
-
-```gradle
-include ':react-native-pusher-push-notifications'
-project(':react-native-pusher-push-notifications').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pusher-push-notifications/android')
-```
-
-Then from typescript:
+In typescript:
 
 ```typescript
 import {Platform} from "react-native";
@@ -277,11 +268,3 @@ By adding `incrementBadge` you can increment the badge number without having to 
   }
 }
 ```
-
-## Troubleshooting
-
-1.  `dyld: Library not loaded: @rpath/PushNotifications.framework/PushNotifications`
-    Ensure the PushNotifications.framework library is added to `General => Embedded Binaries`
-
-2.  `dyld: Library not loaded: @rpath/libswiftCore.dylib`
-    Ensure `Build Settings => Always Embed Swift Standard Libraries` is set to `Yes` and a valid Development provisioning profile exists on your system.
