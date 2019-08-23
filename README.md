@@ -6,6 +6,9 @@ More information about Pusher Beams and their Swift library, `push-notifications
 
 [![npm version](https://badge.fury.io/js/react-native-pusher-push-notifications.svg)](https://badge.fury.io/js/react-native-pusher-push-notifications)
 
+## Requirements
+**This branch is only compatible with React Native >0.60.x**
+
 ## Getting started
 
 `$ npm install react-native-pusher-push-notifications --save`
@@ -16,7 +19,7 @@ or yarn
 
 ### Automatic installation
 
-React native link will install cocoapods required for this to work automatically.
+React native link will install the cocoapods required for this to work automatically.
 
 ### Manual steps required
 
@@ -85,7 +88,7 @@ buildscript {
     dependencies {
         // ...
         // Add this line
-        classpath 'com.google.gms:google-services:4.0.1'
+        classpath('com.google.gms:google-services:4.3.0')
     }
 }    
 ```
