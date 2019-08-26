@@ -19,25 +19,9 @@ or yarn
 
 ### Automatic installation
 
-React native link will install the cocoapods required for this to work automatically.
+React native link will install the pods required for this to work automatically.
 
 ### Manual steps required
-
-#### React Native >0.60.x
-
-1. Add react-native.config.js to root of react-native directory
-```
-module.exports = {
-    dependencies: {
-        "react-native-pusher-push-notifications": {
-            platforms: {
-                android: null // this skips autolink for android
-            }
-        }
-    }
-};
-
-```
 
 #### iOS
 
@@ -47,7 +31,7 @@ module.exports = {
 1. Open ios/PodFile and update `platform :ios, '9.0'` to `platform :ios, '10.0'`
 1.  Open `AppDelegate.m` and add:
 
-```aidl
+```
     // Add this at the top of AppDelegate.m
     #import <RNPusherPushNotifications.h>
 
@@ -82,47 +66,61 @@ instructions (summarized below):
 
 1. Update `android/build.gradle`
 
-```gradle
-buildscript {
-    // ...
-    dependencies {
+    ```gradle
+    buildscript {
         // ...
-        // Add this line
-        classpath('com.google.gms:google-services:4.3.0')
-    }
-}    
-```
+        dependencies {
+            // ...
+            // Add this line
+            classpath('com.google.gms:google-services:4.3.0')
+        }
+    }    
+    ```
 
 2. Add this to `android/app/build.gradle`:
 
-```gradle
-
-// add to plugins
-plugins {
-    ...
-    id('com.google.gms.google-services')
-}
-
-dependencies {
-    ...
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.pusher:push-notifications-android:1.4.4'
-}
-
-```
+    ```gradle
+    
+    // add to plugins
+    plugins {
+        ...
+        id('com.google.gms.google-services')
+    }
+    
+    dependencies {
+        ...
+        implementation 'com.google.firebase:firebase-messaging:20.0.0'
+        implementation 'com.pusher:push-notifications-android:1.4.4'
+    }
+    
+    ```
 
 3. Set up `android/app/google-services.json`
 
-This file is generated via [Google Firebase](https://console.firebase.google.com) console when creating a new app. Setup your app there and download the file.
+    This file is generated via [Google Firebase](https://console.firebase.google.com) console when creating a new app. Setup your app there and download the file.
+    
+    Pusher Beams requires a FCM secret, this is also found under Cloud Messaging in Google Firebase.
 
-Pusher Beams requires a FCM secret, this is also found under Cloud Messaging in Google Firebase.
+4. Add react-native.config.js to root of react-native directory
+    ```
+    module.exports = {
+        dependencies: {
+            "react-native-pusher-push-notifications": {
+                platforms: {
+                    android: null // this skips autolink for android
+                }
+            }
+        }
+    };
+    
+    ```
 
 
 ## Implementation
 
 In typescript:
 
-```typescript
+```typescript jsx
 import {Platform} from "react-native";
 import {PUSHER_BEAMS_INSTANCE_ID} from "react-native-dotenv";
 import RNPusherPushNotifications from "react-native-pusher-push-notifications";
@@ -165,7 +163,7 @@ const onSubscriptionsChanged = (interests: string[]): void => {
 
 ## Usage
 
-```javascript
+```ecmascript 6
 // Import module
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
@@ -239,7 +237,7 @@ const unsubscribe = interest => {
 
 ## iOS only methods
 
-```javascript
+```ecmascript 6
 // Set interests
 const donutInterests = ['debug-donuts', 'debug-general'];
 const setSubscriptions = donutInterests => {
@@ -254,6 +252,37 @@ const setSubscriptions = donutInterests => {
     }
   );
 };
+```
+
+# Sample Payload
+
+`POST` to `https://{pusher_instance_id}.pushnotifications.pusher.com/publish_api/v1/instances/{pusher_instance_id}/publishes` with headers:
+```headers
+    Content-Type: application/json
+    Authorization: Bearer {pusher_secret_key}
+```
+```json
+{
+  "interests": [
+  	"debug-donuts"
+  ],
+  "apns": {
+    "aps": {
+    	"alert" : {
+	      "title": "iOS Notification",
+	      "body": "Hello ios user",
+    	},
+    "badge": 12
+    }
+  },
+  "fcm": {
+    "notification": {
+      "title": "Android notification",
+      "body": "Hello android user"
+    }
+  }
+}
+
 ```
 
 ## Increment Badge number
