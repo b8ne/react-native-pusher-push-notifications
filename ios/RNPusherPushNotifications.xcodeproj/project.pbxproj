@@ -217,6 +217,7 @@
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RNPusherPushNotifications;
 				SKIP_INSTALL = YES;
@@ -234,6 +235,7 @@
 					"$(SRCROOT)/../../../ios/Pods/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = RNPusherPushNotifications;
 				SKIP_INSTALL = YES;
