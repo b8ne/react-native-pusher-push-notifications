@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		68B2C3D622C2CAEC00684CFE /* RNPusherLocalTokenProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B2C3D422C2CAEC00684CFE /* RNPusherLocalTokenProvider.m */; };
 		B3E7B58A1CC2AC0600A0062D /* RNPusherPushNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* RNPusherPushNotifications.m */; };
 		BCA8A1002111819B00AC19BB /* RNPusherEventHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BCA8A0FF2111819B00AC19BB /* RNPusherEventHelper.m */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,8 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libRNPusherPushNotifications.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNPusherPushNotifications.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		68B2C3D422C2CAEC00684CFE /* RNPusherLocalTokenProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPusherLocalTokenProvider.m; sourceTree = "<group>"; };
+		68B2C3D522C2CAEC00684CFE /* RNPusherLocalTokenProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPusherLocalTokenProvider.h; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* RNPusherPushNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNPusherPushNotifications.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* RNPusherPushNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNPusherPushNotifications.m; sourceTree = "<group>"; };
 		BCA8A0FE2111817900AC19BB /* RNPusherEventHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNPusherEventHelper.h; sourceTree = "<group>"; };
@@ -53,6 +56,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				68B2C3D522C2CAEC00684CFE /* RNPusherLocalTokenProvider.h */,
+				68B2C3D422C2CAEC00684CFE /* RNPusherLocalTokenProvider.m */,
 				BCA8A0FF2111819B00AC19BB /* RNPusherEventHelper.m */,
 				BCA8A0FE2111817900AC19BB /* RNPusherEventHelper.h */,
 				B3E7B5881CC2AC0600A0062D /* RNPusherPushNotifications.h */,
@@ -119,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3E7B58A1CC2AC0600A0062D /* RNPusherPushNotifications.m in Sources */,
+				68B2C3D622C2CAEC00684CFE /* RNPusherLocalTokenProvider.m in Sources */,
 				BCA8A1002111819B00AC19BB /* RNPusherEventHelper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
