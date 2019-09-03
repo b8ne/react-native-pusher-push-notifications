@@ -57,11 +57,13 @@ export default {
       RNPusherPushNotifications.setUserId(userId, token, onError, onSuccess);
     }
   },
-  clearAllState: (onError, onSuccess) => {
+  clearAllState: () => {
     if (Platform.OS === 'ios') {
-      RNPusherPushNotifications.clearAllState(onError);
+      console.log('ios clearAllState');
+      RNPusherPushNotifications.clearAllState();
     } else {
-      RNPusherPushNotifications.clearAllState(onError, onSuccess);
+      console.log('android clearAllState');
+      RNPusherPushNotifications.clearAllState();
     }
 
   },

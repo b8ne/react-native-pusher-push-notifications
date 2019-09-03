@@ -196,7 +196,7 @@ public class PusherWrapper {
             Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.clearAllState: " + ex.getMessage());
             System.out.print("Exception in PusherWrapper.clearAllState " + ex.getMessage());
         }
-        
+
     }
 
     public void setOnSubscriptionsChangedListener(final Callback subscriptionChangedListener) {
