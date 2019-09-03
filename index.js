@@ -59,9 +59,9 @@ export default {
   },
   clearAllState: (onError, onSuccess) => {
     if (Platform.OS === 'ios') {
-      RNPusherPushNotifications.setUserId(onError);
+      RNPusherPushNotifications.clearAllState(onError);
     } else {
-      RNPusherPushNotifications.setUserId(onError, onSuccess);
+      RNPusherPushNotifications.clearAllState(onError, onSuccess);
     }
 
   },

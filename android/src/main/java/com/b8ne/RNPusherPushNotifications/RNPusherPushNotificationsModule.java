@@ -103,11 +103,11 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
     }
 
     @ReactMethod
-    public void clearAllState(final Callback errorCallback, final Callback successCallback) {
+    public void clearAllState() {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.setUserId(userId, token, errorCallback, successCallback);
+                pusher.clearAllState();
             }
         });
     }
