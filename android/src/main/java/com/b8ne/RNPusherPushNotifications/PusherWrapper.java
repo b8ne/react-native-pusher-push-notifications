@@ -51,7 +51,8 @@ public class PusherWrapper {
         Log.i("PUSHER_WRAPPER", "onResume subscribing with activity " + getActivityName(activity));
         System.out.print("onResume subscribing with activity " + getActivityName(activity));
 
-        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(activity,
+        PushNotifications.setOnMessageReceivedListenerForVisibleActivity(
+                activity,
                 new PushNotificationReceivedListener() {
                     @Override
                     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -171,9 +172,7 @@ public class PusherWrapper {
         System.out.print("Setting userId to " + userId);
         try {
             LocalTokenProvider instance = new LocalTokenProvider(token);
-
             PushNotifications.setUserId(userId, instance);
-
             Log.d("PUSHER_WRAPPER", "Success! " + userId);
             System.out.print("Success! " + userId);
             successCallback.invoke();
@@ -181,6 +180,22 @@ public class PusherWrapper {
             Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper " + ex.getMessage());
             System.out.print("Exception in PusherWrapper.setUserId " + ex.getMessage());
             // historically this is expecting a statusCode as first arg
+            errorCallback.invoke(0, ex.getMessage());
+        }
+
+    }
+
+    public void clearAllState(final Callback errorCallback, final Callback successCallback) {
+        Log.d("PUSHER_WRAPPER", "Clearallstate; putting the SDK into a clean state");
+        System.out.print("PUSHER_WRAPPER: Clearallstate; putting the SDK into a clean state");
+        try {
+            PushNotifications.clearAllState();
+            Log.d("PUSHER_WRAPPER", "Clearallstate Success!");
+            System.out.print("Clearallstate Success!");
+            successCallback.invoke();
+        } catch (Exception ex) {
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.clearAllState: " + ex.getMessage());
+            System.out.print("Exception in PusherWrapper.clearAllState " + ex.getMessage());
             errorCallback.invoke(0, ex.getMessage());
         }
 

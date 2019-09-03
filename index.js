@@ -57,6 +57,14 @@ export default {
       RNPusherPushNotifications.setUserId(userId, token, onError, onSuccess);
     }
   },
+  clearAllState: (onError, onSuccess) => {
+    if (Platform.OS === 'ios') {
+      RNPusherPushNotifications.setUserId(onError);
+    } else {
+      RNPusherPushNotifications.setUserId(onError, onSuccess);
+    }
+
+  },
   setOnSubscriptionsChangedListener: (onChange) => {
     if (Platform.OS === 'ios') {
       console.log('Not implemented yet');

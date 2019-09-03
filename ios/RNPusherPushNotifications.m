@@ -56,6 +56,14 @@ RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token callback:
     });
 }
 
+RCT_EXPORT_METHOD(clearAllState:callback:(RCTResponseSenderBlock)callback) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[PushNotifications shared] completion:^(NSError *error) {
+            callback(@[error]);
+        }];
+    });
+}
+
 - (void)handleNotification:(NSDictionary *)userInfo
 {
     UIApplicationState state = [UIApplication sharedApplication].applicationState;
