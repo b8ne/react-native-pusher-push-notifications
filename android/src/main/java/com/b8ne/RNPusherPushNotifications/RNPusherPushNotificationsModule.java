@@ -38,16 +38,13 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
       }
   };
 
-
   @Override
   public String getName() {
     return "RNPusherPushNotifications";
   }
 
-
   @ReactMethod
   public void setAppKey(String appKey) {
-
         this.pusher = new PusherWrapper(appKey, this.reactContext);
         reactContext.addLifecycleEventListener(lifecycleEventListener);
   }

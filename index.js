@@ -10,10 +10,6 @@ const rnPusherPushNotificationsEmitter = new NativeEventEmitter(
     RNPusherEventHelper
 );
 
-const errorCallback = callback => (statusCode, response) =>
-  callback && callback(statusCode, response);
-const successCallback = callback => () => callback && callback();
-
 export default {
   setInstanceId: instanceId => {
     if (Platform.OS === 'ios') {
@@ -23,6 +19,7 @@ export default {
     }
   },
   subscribe: (channel, onError, onSuccess) => {
+
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.subscribe(channel, onError);
     } else {
@@ -65,7 +62,6 @@ export default {
       console.log('android clearAllState');
       RNPusherPushNotifications.clearAllState();
     }
-
   },
   setOnSubscriptionsChangedListener: (onChange) => {
     if (Platform.OS === 'ios') {
