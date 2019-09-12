@@ -81,7 +81,6 @@ public class PusherWrapper {
                         }
                     }
                 });
-
     }
 
     public void onDestroy(Activity activity) {

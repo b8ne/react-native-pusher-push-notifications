@@ -66,54 +66,64 @@ instructions (summarized below):
 
 1. Update `android/build.gradle`
 
-    ```gradle
-    buildscript {
+```gradle
+buildscript {
+    // ...
+    dependencies {
         // ...
-        dependencies {
-            // ...
-            // Add this line
-            classpath('com.google.gms:google-services:4.3.0')
-        }
-    }    
-    ```
+        // Add this line
+        classpath('com.google.gms:google-services:4.3.0')
+    }
+}    
+```
 
 2. Add this to `android/app/build.gradle`:
 
-    ```gradle
-    
-    // add to plugins
-    plugins {
-        ...
-        id('com.google.gms.google-services')
-    }
-    
-    dependencies {
-        ...
-        implementation 'com.google.firebase:firebase-messaging:20.0.0'
-        implementation 'com.pusher:push-notifications-android:1.4.4'
-    }
-    
-    ```
+```gradle
 
-3. Set up `android/app/google-services.json`
+// add to plugins
+plugins {
+    ...
+    id('com.google.gms.google-services')
+}
+
+dependencies {
+    ...
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation project(':react-native-pusher-push-notifications')
+    implementation 'com.pusher:push-notifications-android:1.4.4'
+}
+```
+
+3. Update `android/settings.gradle`
+```
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+...
+include ':react-native-pusher-push-notifications'
+project(':react-native-pusher-push-notifications').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-pusher-push-notifications/android')
+...
+include ':app'
+```
+
+4. Set up `android/app/google-services.json`
 
     This file is generated via [Google Firebase](https://console.firebase.google.com) console when creating a new app. Setup your app there and download the file.
     
     Pusher Beams requires a FCM secret, this is also found under Cloud Messaging in Google Firebase.
 
-4. Add react-native.config.js to root of react-native directory
-    ```
-    module.exports = {
-        dependencies: {
-            "react-native-pusher-push-notifications": {
-                platforms: {
-                    android: null // this skips autolink for android
-                }
+5. Add react-native.config.js to root of react-native directory
+```
+module.exports = {
+    dependencies: {
+        "react-native-pusher-push-notifications": {
+            platforms: {
+                android: null // this skips autolink for android
             }
         }
-    };
-    
-    ```
+    }
+};
+
+```
 
 
 ## Implementation
