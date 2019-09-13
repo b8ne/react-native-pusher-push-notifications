@@ -5,7 +5,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0'
-
     }
 }
 
@@ -52,5 +51,6 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.github.ZeptInc:push-notifications-android:1.4.4-zept.4'
+    implementation 'com.github.ZeptInc:push-notifications-android:9dee15aa58'
+
 }
