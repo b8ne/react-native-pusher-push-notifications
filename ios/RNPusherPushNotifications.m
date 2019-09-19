@@ -51,7 +51,7 @@ RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token callback:
     dispatch_async(dispatch_get_main_queue(), ^{
         RNPusherLocalTokenProvider *tokenProvider = [[RNPusherLocalTokenProvider alloc] initWithToken:token];
         [[PushNotifications shared] setUserId:userId tokenProvider:tokenProvider completion:^(NSError *error) {
-            callback(@[error]);
+            //callback(@[error]);
         }];
     });
 }
