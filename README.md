@@ -2,6 +2,9 @@
 
 Manage pusher interest subscriptions from within React Native JS
 
+**UPDATE: 22/09/2019**
+I appreciate all of the support on this project, however due to changes in work I haven't done much with RN in the last year.  Because I know this package helps a lot of people out, I'm looking for and happy to include some else willing to maintain this package, testing and approving PRs.  Shoot me an email.
+
 **IMPORTANT!!!**
 
 This module is intended to complement the setup with [Carthage](https://pusher.com/docs/beams/getting-started/ios/sdk-integration#install-from-carthage). This module allows that implementation to be accessed directly from React Native JS.
