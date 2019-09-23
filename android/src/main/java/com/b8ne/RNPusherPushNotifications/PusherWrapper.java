@@ -165,8 +165,7 @@ public class PusherWrapper {
         }
     }
 
-    public void setUserId(final String userId, final String token, final Callback errorCallback,
-            final Callback successCallback) {
+    public void setUserId(final String userId, final String token, final Callback errorCallback) {
         Log.d("PUSHER_WRAPPER", "Setting userId to " + userId);
         System.out.print("Setting userId to " + userId);
         try {
@@ -176,7 +175,6 @@ public class PusherWrapper {
 
             Log.d("PUSHER_WRAPPER", "Success! " + userId);
             System.out.print("Success! " + userId);
-            successCallback.invoke();
         } catch (Exception ex) {
             Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper " + ex.getMessage());
             System.out.print("Exception in PusherWrapper.setUserId " + ex.getMessage());

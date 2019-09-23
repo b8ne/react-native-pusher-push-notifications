@@ -93,11 +93,11 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
     }
 
     @ReactMethod
-    public void setUserId(final String userId, final String token, final Callback errorCallback, final Callback successCallback) {
+    public void setUserId(final String userId, final String token, final Callback errorCallback) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                pusher.setUserId(userId, token, errorCallback, successCallback);
+                pusher.setUserId(userId, token, errorCallback);
             }
         });
     }

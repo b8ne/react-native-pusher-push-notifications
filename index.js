@@ -54,7 +54,7 @@ export default {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.setUserId(userId, token, onError);
     } else {
-      RNPusherPushNotifications.setUserId(userId, token, onError, onSuccess);
+      RNPusherPushNotifications.setUserId(userId, token, onError);
     }
   },
   setOnSubscriptionsChangedListener: (onChange) => {
