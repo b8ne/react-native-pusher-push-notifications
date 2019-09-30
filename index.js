@@ -54,15 +54,6 @@ export default {
       RNPusherPushNotifications.setUserId(userId, token, onError, onSuccess);
     }
   },
-  clearAllState: () => {
-    if (Platform.OS === 'ios') {
-      console.log('ios clearAllState');
-      RNPusherPushNotifications.clearAllState();
-    } else {
-      console.log('android clearAllState');
-      RNPusherPushNotifications.clearAllState();
-    }
-  },
   setOnSubscriptionsChangedListener: (onChange) => {
     if (Platform.OS === 'ios') {
       console.log('Not implemented yet');

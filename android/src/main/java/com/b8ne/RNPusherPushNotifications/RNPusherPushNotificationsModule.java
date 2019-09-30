@@ -100,16 +100,6 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
     }
 
     @ReactMethod
-    public void clearAllState() {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                pusher.clearAllState();
-            }
-        });
-    }
-
-    @ReactMethod
     public void setOnSubscriptionsChangedListener(final Callback subscriptionChangedListener) {
         AsyncTask.execute(new Runnable() {
             @Override

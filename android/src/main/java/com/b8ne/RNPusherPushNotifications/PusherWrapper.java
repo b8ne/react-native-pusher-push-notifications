@@ -187,19 +187,6 @@ public class PusherWrapper {
         }
     }
 
-    public void clearAllState() {
-        Log.d("PUSHER_WRAPPER", "Clearallstate; putting the SDK into a clean state");
-        System.out.print("PUSHER_WRAPPER: Clearallstate; putting the SDK into a clean state");
-        try {
-            PushNotifications.clearAllState();
-            Log.d("PUSHER_WRAPPER", "Clearallstate Success!");
-            System.out.print("Clearallstate Success!");
-        } catch (Exception ex) {
-            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper.clearAllState: " + ex.getMessage());
-            System.out.print("Exception in PusherWrapper.clearAllState " + ex.getMessage());
-        }
-    }
-
     public void setOnSubscriptionsChangedListener(final Callback subscriptionChangedListener) {
 
         PushNotifications.setOnSubscriptionsChangedListener(new SubscriptionsChangedListener() {
