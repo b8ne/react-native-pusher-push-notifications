@@ -16,6 +16,7 @@ import com.pusher.pushnotifications.PushNotificationReceivedListener;
 
 //
 // TODO: verify the android manifest after https://docs.pusher.com/beams/reference/android
+
 /**
  * Created by bensutter on 13/1/17.
  * https://docs.pusher.com/beams/getting-started/android/init-beams
@@ -93,6 +94,17 @@ public class PusherWrapper {
 
     private String getActivityName(Activity activity) {
         return activity.getClass().getSimpleName();
+    }
+
+    public void clearAllState() {
+        Log.d("PUSHER_WRAPPER", "clearAllState");
+        System.out.print("PUSHER clearAllState");
+        try {
+            PushNotifications.clearAllState();
+        } catch (Exception ex) {
+            Log.d("PUSHER_WRAPPER", "Exception in PusherWrapper clearAllState");
+            System.out.print("Exception in PusherWrapper.clearAllState");
+        }
     }
 
     public void subscribe(final String interest, final Callback errorCallback, final Callback successCallback) {

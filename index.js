@@ -11,6 +11,13 @@ const rnPusherPushNotificationsEmitter = new NativeEventEmitter(
 );
 
 export default {
+  clearAllState: () => {
+    if (Platform.OS === 'ios') {
+      console.log("To Do");
+    } else {
+      RNPusherPushNotifications.clearAllState();
+    }
+  },
   setInstanceId: instanceId => {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.setInstanceId(instanceId);

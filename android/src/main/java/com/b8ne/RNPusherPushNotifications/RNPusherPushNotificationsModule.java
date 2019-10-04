@@ -13,41 +13,51 @@ import com.facebook.react.bridge.Callback;
 public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule {
 
   private final ReactApplicationContext reactContext;
-  private PusherWrapper pusher;
+    private PusherWrapper pusher;
 
-  public RNPusherPushNotificationsModule(ReactApplicationContext reactContext) {
-      super(reactContext);
-      this.reactContext = reactContext;
-  }
+    public RNPusherPushNotificationsModule(ReactApplicationContext reactContext) {
+        super(reactContext);
+        this.reactContext = reactContext;
+    }
 
-  private final LifecycleEventListener lifecycleEventListener = new LifecycleEventListener() {
+    private final LifecycleEventListener lifecycleEventListener = new LifecycleEventListener() {
 
-      @Override
-      public void onHostResume() {
-          pusher.onResume(getCurrentActivity());
-      }
+        @Override
+        public void onHostResume() {
+            pusher.onResume(getCurrentActivity());
+        }
 
-      @Override
-      public void onHostDestroy() {
-          pusher.onDestroy(getCurrentActivity());
-      }
+        @Override
+        public void onHostDestroy() {
+            pusher.onDestroy(getCurrentActivity());
+        }
 
-      @Override
-      public void onHostPause() {
-          pusher.onPause(getCurrentActivity());
-      }
-  };
+        @Override
+        public void onHostPause() {
+            pusher.onPause(getCurrentActivity());
+        }
+    };
 
-  @Override
-  public String getName() {
-    return "RNPusherPushNotifications";
-  }
+    @Override
+    public String getName() {
+        return "RNPusherPushNotifications";
+    }
 
-  @ReactMethod
-  public void setAppKey(String appKey) {
+    @ReactMethod
+    public void setAppKey(String appKey) {
         this.pusher = new PusherWrapper(appKey, this.reactContext);
         reactContext.addLifecycleEventListener(lifecycleEventListener);
-  }
+    }
+
+    @ReactMethod
+    public void clearAllState() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                pusher.clearAllState();
+            }
+        });
+    }
 
     @ReactMethod
     public void subscribe(final String interest, final Callback errorCallback, final Callback successCallback) {
