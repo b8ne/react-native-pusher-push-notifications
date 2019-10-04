@@ -13,7 +13,7 @@ const rnPusherPushNotificationsEmitter = new NativeEventEmitter(
 export default {
   clearAllState: () => {
     if (Platform.OS === 'ios') {
-      console.log("To Do");
+      RNPusherPushNotifications.clearAllState();
     } else {
       RNPusherPushNotifications.clearAllState();
     }
@@ -26,7 +26,6 @@ export default {
     }
   },
   subscribe: (channel, onError, onSuccess) => {
-
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.subscribe(channel, onError);
     } else {
