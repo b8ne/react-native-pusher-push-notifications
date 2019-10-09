@@ -21,11 +21,16 @@ or yarn
 
 `$ yarn add react-native-pusher-push-notifications`
 
-### Automatic installation
+## Automatic installation
 
 React native link will install the pods required for this to work automatically.
 
-### Manual steps required
+### Install via yarn/npm
+```
+yarn add react-native-pusher-push-notifications
+```
+
+### Additional, Manual Steps Required
 
 #### iOS
 

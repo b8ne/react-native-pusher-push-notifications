@@ -16,7 +16,6 @@ allprojects {
         maven {
             url 'https://maven.google.com'
         }
-        maven { url 'https://jitpack.io' }
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
@@ -51,6 +50,6 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.github.ZeptInc:push-notifications-android:9dee15aa58'
+    implementation 'com.pusher:push-notifications-android:1.4.5'
 
 }
