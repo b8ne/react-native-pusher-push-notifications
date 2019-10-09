@@ -129,6 +129,21 @@ module.exports = {
 
 ```
 
+6. Add `RNPusherPushNotificationsPackage` to `MainApplication.java`:
+```java
+import com.b8ne.RNPusherPushNotifications.RNPusherPushNotificationsPackage;
+// ...
+@Override
+    protected List<ReactPackage> getPackages() {
+      @SuppressWarnings("UnnecessaryLocalVariable")
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+      // Packages that cannot be autolinked yet can be added manually here, for example:
+      // packages.add(new MyReactNativePackage());
+      packages.add(new RNPusherPushNotificationsPackage()); // << Make sure this line is here 
+      return packages;
+    }
+```
+
 
 ## Implementation
 
