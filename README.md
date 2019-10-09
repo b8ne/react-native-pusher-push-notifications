@@ -149,6 +149,16 @@ import com.b8ne.RNPusherPushNotifications.RNPusherPushNotificationsPackage;
     }
 ```
 
+#### _suggested, first time_ Clean caches and install all dependencies
+```
+\\ suggested commands; tested on osx
+\\ nuke node_modules
+$ rm -rf ./node_modules && yarn install
+\\ nuke pods
+$ rm -r ~/Library/Developer/Xcode/DerivedData ; cd ./ios && pod deintegrate && pod install ; cd ..
+\\ nuke gradle
+$ cd ./android && ./gradlew clean && ./gradlew --stop; cd ..
+```
 
 ## Implementation
 
