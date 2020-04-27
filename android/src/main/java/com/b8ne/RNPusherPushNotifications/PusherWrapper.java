@@ -5,6 +5,7 @@ import android.util.Log;
 import android.app.Activity;
 
 import java.util.Set;
+import java.util.Map;
 
 import com.facebook.react.bridge.*;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
@@ -72,6 +73,15 @@ public class PusherWrapper {
                             map.putString("icon", notification.getIcon());
                             map.putString("color", notification.getColor());
                             // map.putString("link", notification.getLink());
+
+                            Map<String, String> data = remoteMessage.getData();
+                            WritableMap payload = Arguments.createMap();
+
+                            for(Map.Entry<String,String> entry : data.entrySet()) {
+                                payload.putString(entry.getKey(), entry.getValue());
+                            }
+
+                            map.putMap("data", payload);
 
                             context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                                     .emit(notificationEvent, map);
