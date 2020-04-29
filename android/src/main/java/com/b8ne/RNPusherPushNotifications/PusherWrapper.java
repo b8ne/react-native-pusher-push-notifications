@@ -64,6 +64,7 @@ public class PusherWrapper {
                         // WritableMap map = Arguments.createMap();
                         final WritableMap map = new WritableNativeMap();
                         RemoteMessage.Notification notification = remoteMessage.getNotification();
+                        Map<String, String> data = remoteMessage.getData();
 
                         if (notification != null) {
                             map.putString("body", notification.getBody());
@@ -74,14 +75,15 @@ public class PusherWrapper {
                             map.putString("color", notification.getColor());
                             // map.putString("link", notification.getLink());
 
-                            Map<String, String> data = remoteMessage.getData();
-                            WritableMap payload = Arguments.createMap();
+                            if (data != null) {
+                                WritableMap payload = Arguments.createMap();
 
-                            for(Map.Entry<String,String> entry : data.entrySet()) {
-                                payload.putString(entry.getKey(), entry.getValue());
+                                for(Map.Entry<String,String> entry : data.entrySet()) {
+                                    payload.putString(entry.getKey(), entry.getValue());
+                                }
+
+                                map.putMap("data", payload);
                             }
-
-                            map.putMap("data", payload);
 
                             context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                                     .emit(notificationEvent, map);
