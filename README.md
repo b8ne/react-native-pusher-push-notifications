@@ -207,7 +207,7 @@ const onSubscriptionsChanged = (interests: string[]): void => {
 
 ## Usage
 
-```ecmascript 6
+```jsx
 // Import module
 import RNPusherPushNotifications from 'react-native-pusher-push-notifications';
 
@@ -281,7 +281,7 @@ const unsubscribe = interest => {
 
 ## iOS only methods
 
-```ecmascript 6
+```jsx
 // Set interests
 const donutInterests = ['debug-donuts', 'debug-general'];
 const setSubscriptions = donutInterests => {
@@ -335,11 +335,11 @@ The APS data sent to Pusher Beams and then to Apple have an option `badge`. This
 
 By adding `incrementBadge` you can increment the badge number without having to deal with your backend.
 
-```
+```json
 {
-  aps: {
-    data: {
-      incrementBadge: true
+  "aps": {
+    "data": {
+      "incrementBadge": true
     }
   }
 }
