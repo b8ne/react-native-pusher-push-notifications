@@ -27,8 +27,10 @@ public class NotificationsMessagingService {
         Intent intent = reactActivity.getIntent();
         final WritableMap map = new WritableNativeMap();
 
+        boolean launchedFromHistory = intent != null ? (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0 : false;
+
         Bundle extras = intent.getExtras();
-        if (extras != null) {
+        if (!launchedFromHistory & extras != null) {
             WritableMap payload = Arguments.createMap();
 
             for (String key : extras.keySet()) {
