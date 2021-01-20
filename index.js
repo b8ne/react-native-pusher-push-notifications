@@ -10,11 +10,14 @@ const rnPusherPushNotificationsEmitter = new NativeEventEmitter(
     RNPusherEventHelper
 );
 
-const errorCallback = callback => (statusCode, response) =>
-  callback && callback(statusCode, response);
-const successCallback = callback => () => callback && callback();
-
 export default {
+  clearAllState: () => {
+    if (Platform.OS === 'ios') {
+      RNPusherPushNotifications.clearAllState();
+    } else {
+      RNPusherPushNotifications.clearAllState();
+    }
+  },
   setInstanceId: instanceId => {
     if (Platform.OS === 'ios') {
       RNPusherPushNotifications.setInstanceId(instanceId);
@@ -48,6 +51,13 @@ export default {
       RNPusherPushNotifications.unsubscribe(channel, onError);
     } else {
       RNPusherPushNotifications.unsubscribe(channel, onError, onSuccess);
+    }
+  },
+  setUserId: (userId, token, onError, onSuccess) => {
+    if (Platform.OS === 'ios') {
+      RNPusherPushNotifications.setUserId(userId, token, onError);
+    } else {
+      RNPusherPushNotifications.setUserId(userId, token, onError, onSuccess);
     }
   },
   setOnSubscriptionsChangedListener: (onChange) => {

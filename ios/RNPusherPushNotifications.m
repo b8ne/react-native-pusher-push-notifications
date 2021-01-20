@@ -1,4 +1,5 @@
 #import "RNPusherEventHelper.h"
+#import "RNPusherLocalTokenProvider.h"
 #import "RNPusherPushNotifications.h"
 #import "UIKit/UIKit.h"
 #import <UIKit/UIKit.h>
@@ -32,6 +33,15 @@ RCT_EXPORT_METHOD(subscribe:(NSString *)interest callback:(RCTResponseSenderBloc
   });
 }
 
+RCT_EXPORT_METHOD(clearAllState) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RCTLogInfo(@"clearAllState Start!");
+        [[PushNotifications shared] clearAllStateWithCompletion:^() {
+            RCTLogInfo(@"clearAllState End!");
+        }];
+    });
+}
+
 RCT_EXPORT_METHOD(setSubscriptions:(NSArray *)interests callback:(RCTResponseSenderBlock)callback) {
   dispatch_async(dispatch_get_main_queue(), ^{
     NSError *anyError;
@@ -44,6 +54,18 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
     NSError *anyError;
     [[PushNotifications shared] removeDeviceInterestWithInterest:interest error:&anyError];
   });
+}
+
+RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token callback:(RCTResponseSenderBlock)callback) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        RNPusherLocalTokenProvider *tokenProvider = [[RNPusherLocalTokenProvider alloc] initWithToken:token];
+        [[PushNotifications shared] setUserId:userId tokenProvider:tokenProvider completion:^(NSError *error) {
+            if (error) {
+                callback(@[error]);
+                RCTLogInfo(@"setUserId Error!: %@", error);
+            }
+        }];
+    });
 }
 
 - (void)handleNotification:(NSDictionary *)userInfo
