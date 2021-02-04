@@ -2,9 +2,8 @@
 
 Manage pusher interest subscriptions from within React Native JS
 
-**UPDATE: 22/09/2019**
-I appreciate all of the support on this project, however due to changes in work I haven't done much with RN in the last year.  Because I know this package helps a lot of people out, I'm looking for and happy to include some else willing to maintain this package, testing and approving PRs.  Shoot me an email.
-
+**UPDATE: 4/02/2021**
+[Luminate One](https://www.luminate.one/) have taken over maintaince of this project, release 2.5 is now out which contains data handling for android apps
 
 More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
 
@@ -316,13 +315,20 @@ const setSubscriptions = donutInterests => {
 	      "title": "iOS Notification",
 	      "body": "Hello ios user",
     	},
-    "badge": 12
+    "sound": "default"
+    "badge": 12,
+    "data": {
+      	"example": "hello world"
+      }
     }
   },
   "fcm": {
     "notification": {
       "title": "Android notification",
       "body": "Hello android user"
+      "data": {
+      	"example": "hello world"
+      }
     }
   }
 }
@@ -342,5 +348,60 @@ By adding `incrementBadge` you can increment the badge number without having to 
       "incrementBadge": true
     }
   }
+}
+```
+
+## Data handling Android
+
+When the application does not have focus the extra data is passed to the application via its lunanching intent which will need to be passed to the service
+
+```
+import com.b8ne.RNPusherPushNotifications.NotificationsMessagingService;
+
+public class MainActivity extends ReactActivity {
+
+...
+  protected void onStart() {
+    super.onStart();
+
+    ReactInstanceManager reactInstanceManager = getReactNativeHost().getReactInstanceManager();
+    NotificationsMessagingService.read(reactInstanceManager, this);
+  }
+
+  @Override
+  public void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+    setIntent(intent);
+    ReactInstanceManager reactInstanceManager = getReactNativeHost().getReactInstanceManager();
+    NotificationsMessagingService.read(reactInstanceManager, this);
+  }
+}
+
+```
+
+If you have a splash screen you will need to forward the intent extras to your MainActivity
+
+```
+
+public class SplashActivity extends AppCompatActivity {
+...
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.launch_screen);
+	
+        final Intent splashScreenIntent = getIntent();
+
+        new Handler().postDelayed(new Runnable(){
+            @Override
+            public void run() {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                intent.putExtras(splashScreenIntent);
+                startActivity(intent);
+                finish();
+            }
+        }, SPLASH_DISPLAY_LENGTH);
+
+    }
 }
 ```
