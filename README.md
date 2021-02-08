@@ -3,7 +3,7 @@
 Manage pusher interest subscriptions from within React Native JS
 
 **UPDATE: 4/02/2021**
-[Luminate One](https://www.luminate.one/) have taken over maintaince of this project, release 2.5 is now out which contains data handling for android apps
+[LuminateOne](https://www.luminate.one/) have taken over maintaince of this project, release 2.5 is now out which contains data handling for android apps
 
 More information about Pusher Beams and their Swift library, `push-notifications-swift`, can be found on their [Github repo](https://github.com/pusher/push-notifications-swift).
 
