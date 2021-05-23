@@ -56,13 +56,15 @@ RCT_EXPORT_METHOD(unsubscribe:(NSString *)interest callback:(RCTResponseSenderBl
   });
 }
 
-RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token callback:(RCTResponseSenderBlock)callback) {
+RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token errorCallback:(RCTResponseSenderBlock)errorCallback successCallback:(RCTResponseSenderBlock)successCallback) {
     dispatch_async(dispatch_get_main_queue(), ^{
         RNPusherLocalTokenProvider *tokenProvider = [[RNPusherLocalTokenProvider alloc] initWithToken:token];
         [[PushNotifications shared] setUserId:userId tokenProvider:tokenProvider completion:^(NSError *error) {
             if (error) {
-                callback(@[error]);
+                errorCallback(@[error]);
                 RCTLogInfo(@"setUserId Error!: %@", error);
+            } else {
+                successCallback(@[]);
             }
         }];
     });
