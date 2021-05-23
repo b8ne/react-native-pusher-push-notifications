@@ -37,7 +37,7 @@ yarn add react-native-pusher-push-notifications
 ** DO NOT follow the pusher.com push notification docs that detail modifying the AppDelegate.h/m files! - this package takes care of most of the steps for you**
 
 1. Open ios/PodFile and update `platform :ios, '9.0'` to `platform :ios, '10.0'`
-1.  Open `AppDelegate.m` and add:
+2.  Open `AppDelegate.m` and add:
 
 ```
     // Add this at the top of AppDelegate.m
@@ -57,6 +57,15 @@ yarn add react-native-pusher-push-notifications
       NSLog(@"Remote notification support is unavailable due to error: %@", error.localizedDescription);
     }
 ```
+
+#### Enable remote notifications
+
+To receive background push notifications you will need to enable Remote notifications capability In Xcode.
+
+1. Open your workspace Xcode and select your project
+2. Go go Signing & Capabilities tab
+3. If you don't have Background modes enabled, click `+ Capability`
+4. Make sure `Remote notifications` is checked
 
 ##### Possible Issues
 
@@ -326,9 +335,9 @@ const setSubscriptions = donutInterests => {
     "notification": {
       "title": "Android notification",
       "body": "Hello android user"
-      "data": {
-      	"example": "hello world"
-      }
+    },
+    "data": {
+      "example": "hello world"
     }
   }
 }
