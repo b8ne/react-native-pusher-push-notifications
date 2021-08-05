@@ -234,6 +234,10 @@ export const init = () => {
 
   // Setup notification listeners
   RNPusherPushNotifications.on('notification', handleNotification);
+
+  // Optionally you can assign the listeners to variables so you can clean them up later.
+  //    const listener = RNPusherPushNotifications.on('registered', () => {});
+  //    listener.remove();
 };
 
 // Handle notifications received

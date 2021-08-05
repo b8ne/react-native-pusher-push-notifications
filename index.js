@@ -69,9 +69,9 @@ export default {
   },
   on: (eventName, callback) => {
     if (Platform.OS === 'ios') {
-      rnPusherPushNotificationsEmitter.addListener(eventName, payload => callback(payload));
+      return rnPusherPushNotificationsEmitter.addListener(eventName, payload => callback(payload));
     } else {
-      DeviceEventEmitter.addListener(eventName, payload => callback(payload));
+      return DeviceEventEmitter.addListener(eventName, payload => callback(payload));
     }
   },
 };
