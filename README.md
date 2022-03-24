@@ -370,6 +370,8 @@ When the application does not have focus the extra data is passed to the applica
 
 ```
 import com.b8ne.RNPusherPushNotifications.NotificationsMessagingService;
+import com.facebook.react.ReactInstanceManager;
+import android.content.Intent;
 
 public class MainActivity extends ReactActivity {
 
