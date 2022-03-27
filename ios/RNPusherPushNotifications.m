@@ -73,7 +73,7 @@ RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token errorCall
 RCT_EXPORT_METHOD(getApplicationIconBadgeNumber:(RCTResponseSenderBlock)callback) {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSInteger badgeCount = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-        callback(badgeCount);
+        callback([NSNumber numberWithInteger:badgeCount]);
     });
 }
 
