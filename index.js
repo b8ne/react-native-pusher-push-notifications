@@ -74,4 +74,18 @@ export default {
       return DeviceEventEmitter.addListener(eventName, payload => callback(payload));
     }
   },
+  getApplicationIconBadgeNumber: (callback) => {
+    if (Platform.OS === 'ios') {
+        return RNPusherPushNotifications.getApplicationIconBadgeNumber(callback);
+      } else {
+        return RNPusherPushNotifications.getApplicationIconBadgeNumber(callback);
+      }
+  },
+  setApplicationIconBadgeNumber: (badgeNumber) => {
+    if (Platform.OS === 'ios') {
+      RNPusherPushNotifications.setApplicationIconBadgeNumber(badgeNumber);
+    } else {
+      RNPusherPushNotifications.setApplicationIconBadgeNumber(badgeNumber);
+    }
+  }
 };
