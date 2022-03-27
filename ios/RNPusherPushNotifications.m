@@ -70,6 +70,19 @@ RCT_EXPORT_METHOD(setUserId:(NSString *)userId token:(NSString *)token errorCall
     });
 }
 
+RCT_EXPORT_METHOD(getApplicationIconBadgeNumber:(RCTResponseSenderBlock)callback) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSInteger badgeCount = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        callback([NSNumber numberWithInteger:badgeCount]);
+    });
+}
+
+RCT_EXPORT_METHOD(setApplicationIconBadgeNumber:(nonnull NSNumber*)badgeNumber) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [UIApplication sharedApplication].applicationIconBadgeNumber = [badgeNumber integerValue];
+    });
+}
+
 - (void)handleNotification:(NSDictionary *)userInfo
 {
     UIApplicationState state = [UIApplication sharedApplication].applicationState;
