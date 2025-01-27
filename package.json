@@ -1,5 +1,5 @@
 {
-  "name": "@marvelous-ikechi/react-native-pusher-push-notifications",
+  "name": "react-native-pusher-push-notifications-manager",
   "version": "2.5.4",
   "description": "Manage pusher channel subscriptions from within React Native JS",
   "main": "index.js",
