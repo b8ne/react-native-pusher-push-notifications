@@ -1,6 +1,6 @@
 {
-  "name": "marvelous-ikechi-react-native-pusher-push-notifications",
-  "version": "2.5.2",
+  "name": "@marvelous-ikechi/react-native-pusher-push-notifications",
+  "version": "2.5.4",
   "description": "Manage pusher channel subscriptions from within React Native JS",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "push",
     "notifications"
   ],
-  "author": "marelous-ikechi",
+  "author": "marvelous-ikechi",
   "license": "MIT",
   "peerDependencies": {
     "react-native": ">=0.60.0"

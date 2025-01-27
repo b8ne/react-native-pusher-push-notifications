@@ -11,11 +11,11 @@ More information about Pusher Beams and their Swift library, `push-notifications
 
 ## Getting started
 
-`$ npm install react-native-pusher-push-notifications --save`
+`$ npm install @marvelous-ikechi/react-native-pusher-push-notifications --save`
 
 or yarn
 
-`$ yarn add react-native-pusher-push-notifications`
+`$ yarn add @marvelous-ikechi/react-native-pusher-push-notifications`
 
 ## Automatic installation
 
