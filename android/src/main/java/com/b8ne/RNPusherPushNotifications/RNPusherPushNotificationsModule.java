@@ -119,4 +119,13 @@ public class RNPusherPushNotificationsModule extends ReactContextBaseJavaModule 
         });
     }
 
+    @ReactMethod
+	public void getApplicationIconBadgeNumber(final Callback callback) {
+        //some android guy please help with this.
+	}
+
+    @ReactMethod
+	public void setApplicationIconBadgeNumber(int badgeNumber) {
+        //some android guy please help with this.
+	}
 }

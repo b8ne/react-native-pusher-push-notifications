@@ -255,6 +255,15 @@ const handleNotification = notification => {
       //             You can fetch required data here don't do anything with UI
       case 'active':
       // App is foreground and notification is received. Show a alert or something.
+
+      // You can also decrease or clear badge count with the help of below methods.
+      // For now those works on iOS only as for Android we have not added any functionality yet.
+      // Contributors can help here if they want from Android community.
+        RNPusherPushNotifications.getApplicationIconBadgeNumber((badgeCount) => {
+            if (badgeCount > 0) {
+                RNPusherPushNotifications.setApplicationIconBadgeNumber(badgeCount - 1);
+            }
+        });
       default:
         break;
     } else {
