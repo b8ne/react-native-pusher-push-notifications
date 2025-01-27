@@ -99,16 +99,13 @@ buildscript {
 ```gradle
 
 // add to plugins
-plugins {
-    ...
-    id('com.google.gms.google-services')
-}
+apply plugin: "com.google.gms.google-services"
 
 dependencies {
     ...
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation project(':react-native-pusher-push-notifications')
-    implementation 'com.pusher:push-notifications-android:1.4.4'
+    implementation 'com.pusher:push-notifications-android:1.10.0'
 }
 ```
 
