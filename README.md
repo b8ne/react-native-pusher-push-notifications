@@ -108,7 +108,7 @@ dependencies {
     ...
     implementation 'com.google.firebase:firebase-messaging:22.0.0'
     implementation project(':react-native-pusher-push-notifications')
-    implementation     implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.pusher:push-notifications-android:1.10.0'
 }
 ```
 
